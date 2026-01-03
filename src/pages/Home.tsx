@@ -15,7 +15,7 @@ export default function Home() {
 
         <main>
           {/* Hero Section */}
-          <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
+          <section className="bg-blue-50 dark:bg-blue-950 py-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6">
@@ -26,11 +26,15 @@ export default function Home() {
                     A passionate developer, designer, and problem solver creating meaningful digital experiences.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
-                      <Download size={20} />
+                    <a
+                        href="/zm-resume.pdf"
+                        download
+                        className="mt-4 md:mt-0 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                    >
+                      <Download size={18} />
                       <span>Download Resume</span>
-                    </button>
-                    <button className="border border-border text-foreground px-6 py-3 rounded-lg hover:bg-secondary transition-colors">
+                    </a>
+                    <button className="border border-border text-foreground px-6 py-3 rounded-lg bg-gray-300 dark:bg-gray-500 hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors">
                       Get In Touch
                     </button>
                   </div>
@@ -39,7 +43,7 @@ export default function Home() {
                 <div className="flex justify-center lg:justify-end">
                   <div className="w-80 h-80 rounded-full overflow-hidden shadow-2xl">
                     <img
-                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face"
+                        src="/about_me/profile.jpg"
                         alt="Profile"
                         className="w-full h-full object-cover"
                     />
@@ -55,8 +59,8 @@ export default function Home() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
                   <img
-                      src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop"
-                      alt="Working environment"
+                      src="/about_me/about_me.jpg"
+                      alt="My Family"
                       className="rounded-lg shadow-lg"
                   />
                 </div>
@@ -76,7 +80,7 @@ export default function Home() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
                     <div className="flex items-center space-x-3">
                       <MapPin size={20} className="text-blue-600" />
-                      <span className="text-foreground">Manhattan, KS</span>
+                      <span className="text-foreground">Manhattan, Kansas</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Calendar size={20} className="text-blue-600" />

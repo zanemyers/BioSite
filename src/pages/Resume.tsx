@@ -8,8 +8,14 @@ const backendSkills = ["Python", "Django", "Node.js", "Express.js", "Rest APIs",
 const otherSkills = ["Git", "Docker", "Playwright", "Just"]
 const interests = ["Web Development", "App Development (IOS)", "AI Integrations", "Mentorship & Personal Development", "International Missions & Travel"]
 
+const jobColorMap = {
+  blue: { border: 'border-blue-600', text: 'text-blue-600' },
+  green: { border: 'border-green-600', text: 'text-green-600' },
+  purple: { border: 'border-purple-600', text: 'text-purple-600' },
+} as const;
+
 interface JobProps {
-  color: string;
+  color: "blue" | "green" | "purple";
   title: string;
   company: string;
   from: string;
@@ -18,17 +24,20 @@ interface JobProps {
   children?: React.ReactNode
 }
 
-const JobEntry = (props: JobProps) => (
+const JobEntry = (props: JobProps) => {
+  const color = jobColorMap[props.color] || jobColorMap.blue;
+
+  return (
     <div className="space-y-6 mt-4">
-      <div className={`border-l-4 pl-6 border-${props.color}-600`}>
+      <div className={`border-l-4 pl-6 ${color.border}`}>
         <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
           <div>
             <h3 className="text-xl font-semibold text-card-foreground">{props.title}</h3>
-            <p className={`text-${props.color}-600 font-medium`}>{props.company}</p>
+            <p className={`${color.text} font-medium`}>{props.company}</p>
           </div>
           <div className="flex flex-col text-muted-foreground text-sm mt-1 md:mt-0 md:items-end">
             <div className="flex items-center">
-              <Calendar size={16} className="mr-1 shrink-0" />
+              <Calendar size={16} className="mr-1 shrink-0"/>
               <span>{props.from} – {props.to}</span>
             </div>
             <div className="mt-0.5">{props.location}</div>
@@ -39,26 +48,37 @@ const JobEntry = (props: JobProps) => (
         </ul>
       </div>
     </div>
-)
+  )
+}
+
+const skillColorMap = {
+  blue: { bg: 'bg-blue-100', text: 'text-blue-800' },
+  green: { bg: 'bg-green-100', text: 'text-green-800' },
+  purple: { bg: 'bg-purple-100', text: 'text-purple-800' },
+} as const;
 
 interface SkillProps {
-  color: string;
+  color: "blue" | "green" | "purple";
   title: string;
   skills: string[],
 }
 
-const SkillSection = (props: SkillProps) => (
+const SkillSection = (props: SkillProps) => {
+  const color = skillColorMap[props.color] || skillColorMap.blue;
+
+  return (
     <div>
       <h3 className="font-semibold text-card-foreground mb-3">{props.title}</h3>
       <div className="flex flex-wrap gap-2">
         {props.skills.map((skill) => (
-            <span key={skill} className={`px-3 py-1 bg-${props.color}-100 text-${props.color}-800 text-sm rounded-full`}>
+            <span key={skill} className={`px-3 py-1 ${color.bg} ${color.text} text-sm rounded-full`}>
               {skill}
             </span>
         ))}
       </div>
     </div>
-)
+  )
+}
 
 export default function Resume() {
   return (
@@ -74,10 +94,15 @@ export default function Resume() {
                   <h1 className="text-3xl font-bold text-card-foreground mb-2">Zane Myers</h1>
                   <p className="text-xl text-muted-foreground">Software Engineer</p>
                 </div>
-                <button className="mt-4 md:mt-0 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
+                <a
+                    href="/zm-resume.pdf"
+                    download
+                    className="mt-4 md:mt-0 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                >
                   <Download size={18} />
                   <span>Download PDF</span>
-                </button>
+                </a>
+
               </div>
 
               <div className="flex flex-wrap gap-4 text-sm text-muted-foreground w-full">
@@ -117,6 +142,9 @@ export default function Resume() {
                   </span>
                 </div>
               </div>
+              <p className="text-muted-foreground mt-4 text-sm italic">
+                References available upon request
+              </p>
             </div>
 
             {/* Professional Summary */}
