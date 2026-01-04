@@ -1,7 +1,6 @@
 # BioSite
 
-A personal portfolio and informational website built with **React**, **Tailwind CSS**, and **Radix UI Themes**.  
-The site showcases my projects, resume, skills, updates, and provides informational pages like Terms of Service and Privacy Policy.
+The site showcases my projects, resume, skills, and life updates.
 
 ---
 
