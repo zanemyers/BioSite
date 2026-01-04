@@ -5,18 +5,6 @@ The site showcases my projects, resume, skills, updates, and provides informatio
 
 ---
 
-## Table of Contents
-
-- [Features](#features)  
-- [Tech Stack](#tech-stack)  
-- [Pages](#pages)  
-- [Installation](#installation)  
-- [Usage](#usage)  
-- [Deployment](#deployment)  
-- [License](#license)  
-
----
-
 ## Features
 
 - Responsive and modern design  
@@ -26,15 +14,6 @@ The site showcases my projects, resume, skills, updates, and provides informatio
 - Updates section for personal and professional posts  
 - Terms of Service and Privacy Policy pages  
 - Custom 404 page that respects the selected theme  
-
----
-
-## Tech Stack
-
-- **Frontend:** React, TypeScript, Tailwind CSS  
-- **UI Components:** Radix UI Themes  
-- **Routing:** React Router v6  
-- **Hosting:** Render (static site deployment)  
 
 ---
 
