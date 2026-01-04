@@ -4,9 +4,26 @@ import Footer from '../components/Footer';
 import SkillCard from '../components/SkillsCard';
 import { Download, MapPin, Calendar } from 'lucide-react';
 
-const frontendSkills = ['React', 'TypeScript', 'Tailwind CSS', 'Next.js'];
-const backendSkills = ['Node.js', 'Python', 'PostgreSQL', 'AWS'];
-const designTools = ['Figma', 'Adobe Creative Suite', 'Git', 'Docker'];
+const frontendSkills = [
+  { name: 'React', level: 60 },
+  { name: 'TypeScript', level: 65 },
+  { name: 'HTML', level: 90 },
+  { name: 'Bootstrap 5', level: 80 },
+];
+
+const backendSkills = [
+  { name: 'Node.js', level: 75 },
+  { name: 'Python', level: 85 },
+  { name: 'PostgreSQL', level: 70 },
+  { name: 'REST API', level: 80 },
+];
+
+const otherTools = [
+  { name: 'Playwright', level: 85 },
+  { name: 'Git', level: 85 },
+  { name: 'Docker', level: 60 },
+];
+
 
 export default function Home() {
   return (
@@ -23,7 +40,7 @@ export default function Home() {
                     Hi, I'm <span className="text-blue-600">Zane Myers</span>
                   </h1>
                   <p className="text-xl text-muted-foreground leading-relaxed">
-                    A passionate developer, designer, and problem solver creating meaningful digital experiences.
+                    A developer and problem solver who enjoys learning new technologies and building things that are genuinely useful.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <a
@@ -68,13 +85,14 @@ export default function Home() {
                 <div className="space-y-6">
                   <h2 className="text-3xl font-bold text-foreground">About Me</h2>
                   <p className="text-muted-foreground leading-relaxed">
-                    I'm a dedicated professional with a passion for creating innovative solutions and meaningful connections.
-                    With years of experience in technology and design, I bring a unique perspective to every project I work on.
+                    I’m a software developer who enjoys turning messy problems into clean, reliable solutions.
+                    My work focuses on building data-driven tools and web applications, often combining backend systems
+                    with thoughtful frontend experiences to make complex information usable.
                   </p>
                   <p className="text-muted-foreground leading-relaxed">
-                    When I'm not coding or designing, you can find me exploring new places, reading about emerging technologies,
-                    or spending time with family and friends. I believe in continuous learning and always strive to push the
-                    boundaries of what's possible.
+                    Outside of work, I enjoy exploring new places, digging into emerging technologies,
+                    and spending time with my family. I’m motivated by learning, enjoy a good challenge,
+                    and like pushing myself to build things that are both practical and well-crafted.
                   </p>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
@@ -105,7 +123,7 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <SkillCard name="Frontend Development" skills={frontendSkills} color="bg-blue-600" />
                 <SkillCard name="Backend Development" skills={backendSkills} color="bg-green-600" />
-                <SkillCard name="Design & Tools" skills={designTools} color="bg-purple-600" />
+                <SkillCard name="Design & Tools" skills={otherTools} color="bg-purple-600" />
               </div>
             </div>
           </section>

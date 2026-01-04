@@ -10,7 +10,7 @@ interface Props {
   liveUrl?: string;
 }
 
-const ProjectCard = (props: Props) => {
+const  ProjectCard = (props: Props) => {
   return (
       <div className="bg-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         <div className="aspect-video overflow-hidden">

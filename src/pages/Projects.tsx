@@ -7,19 +7,26 @@ export default function Projects() {
   const projects = [
     {
       title: 'Flybox',
-      description: 'A full-stack e-commerce solution with React, Node.js, and Stripe integration. Features include user authentication, product management, shopping cart, and order processing.',
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop',
-      technologies: ['React', 'Node.js', 'PostgreSQL', 'Stripe', 'Tailwind CSS'],
+      description: 'Flybox collects and aggregates fly-fishing shop data by scraping Google Maps and individual shop websites. It outputs structured, analyzable datasets that highlight online sales, fishing reports, and digital presence.',
+      image: '/project_images/flybox.png',
+      technologies: ['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'Bootstrap 5', 'Just', 'Docker', 'SCSS'],
       githubUrl: 'https://github.com/zanemyers/Flybox',
       liveUrl: 'https://flybox.zm1.org'
     },
     {
-      title: 'Placeholder',
-      description: 'A collaborative task management application with real-time updates, drag-and-drop functionality, and team collaboration features.',
-      image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=600&h=400&fit=crop',
-      technologies: ['React', 'TypeScript', 'Socket.io', 'MongoDB', 'Express'],
-      githubUrl: '#',
-      liveUrl: '#'
+      title: 'Budgeteer (WIP)',
+      description: 'An Idea for how to do budgets better.',
+      image: '/project_images/budgeteer.jpg',
+      technologies: ['Python', 'Django', 'JavaScript', 'SCSS', 'Just', 'HTML'],
+      githubUrl: 'https://github.com/zanemyers/Budgeteer',
+    },
+    {
+      title: 'BioSite',
+      description: "A website all about me! And guess what... you're already there!",
+      image: '/project_images/bioSite.png',
+      technologies: ['React', 'Typescript', 'Tailwind CSS'],
+      githubUrl: 'https://github.com/zanemyers/BioSite',
+      liveUrl: 'https://zm1.org'
     },
   ];
 
@@ -68,13 +75,13 @@ export default function Projects() {
                     <div className="flex space-x-4">
                       <a
                           href={projects[0].githubUrl}
-                          className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+                          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                       >
                         View Code
                       </a>
                       <a
                           href={projects[0].liveUrl}
-                          className="border border-border text-foreground px-6 py-3 rounded-lg hover:bg-secondary transition-colors"
+                          className="border border-border text-foreground px-6 py-3 rounded-lg border-gray-300  hover:bg-gray-300 dark:hover:text-black transition-colors"
                       >
                         Live Demo
                       </a>
@@ -110,9 +117,11 @@ export default function Projects() {
                   I'm always open to discussing new opportunities and interesting projects.
                   Let's connect and see how we can create something amazing together.
                 </p>
-                <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                <a href="mailto:zane15myers@gmail.com">
+                <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
                   Get In Touch
                 </button>
+                </a>
               </div>
             </section>
           </div>

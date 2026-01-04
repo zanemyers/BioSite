@@ -24,7 +24,7 @@ const Footer = () => {
                     <a
                         key={link.name}
                         href={link.href}
-                        className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-blue-50"
+                        className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-blue-100"
                         aria-label={link.name}
                     >
                       <Icon size={20} />

@@ -6,7 +6,7 @@ interface UpdateCardProps {
   title: string;
   content: string;
   date: Date;
-  category: string;
+  category: string[];
   image?: string;
 }
 
@@ -25,8 +25,6 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
     default: 'bg-gray-100 text-gray-800'
   };
 
-  const categoryColor = categoryColors[category as keyof typeof categoryColors] || categoryColors.default;
-
   return (
       <article className="bg-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         {image && (
@@ -41,9 +39,17 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
 
         <div className="p-6">
           <div className="flex items-center justify-between mb-3">
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${categoryColor}`}>
-            {category}
-          </span>
+              <div className="flex flex-wrap gap-2">
+                  {category.map((cat) => {
+                      const catColor = categoryColors[cat] || categoryColors.default;
+                      return (
+                          <span key={cat} className={`px-3 py-1 rounded-full text-sm font-medium ${catColor}`}>
+                            {cat}
+                          </span>
+                      );
+                  })}
+              </div>
+
             <div className="flex items-center text-muted-foreground text-sm">
               <Calendar size={16} className="mr-1" />
               {format(date, 'MMM dd, yyyy')}
@@ -51,7 +57,7 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
           </div>
 
           <h3 className="text-xl font-semibold text-card-foreground mb-3">{title}</h3>
-          <p className="text-muted-foreground leading-relaxed">{content}</p>
+          <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{content}</p>
         </div>
       </article>
   );

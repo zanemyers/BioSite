@@ -6,65 +6,46 @@ import UpdateCard from '../components/UpdateCard';
 export default function Updates() {
   const updates = [
     {
-      title: 'Started Learning Machine Learning',
-      content: 'Began my journey into machine learning and AI. Currently working through Andrew Ng\'s course and building my first neural network projects. Excited to explore how AI can enhance web applications!',
-      date: new Date('2026-01-15'),
-      category: 'learning',
-      image: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600&h=400&fit=crop'
+      title: 'Job Search',
+      content: (
+          "I began exploring new opportunities in October, looking for the right role to pursue after our return from Uganda. " +
+          "Over the past few months, I’ve had several interviews and remain hopeful for the right fit. That said, the online " +
+          "application process has been challenging and, at times, disheartening. I’ve submitted close to 100 applications, " +
+          "often receiving only automated confirmations. I’m grateful for the few responses I’ve received, even if they were " +
+          "simply to indicate that the role had been filled or that other candidates were a better fit. And while I don’t " +
+          "have a solution, it’s clear that there must be a more effective and human-centered way to connect talent " +
+          "with opportunity."
+      ),
+      date: new Date('2026-01-3'),
+      category: ['learning', 'professional'],
+      image: '/update_images/job-hunt.jpg'
     },
     {
-      title: 'Promoted to Senior Developer',
-      content: 'Thrilled to announce my promotion to Senior Full Stack Developer! Looking forward to mentoring junior developers and leading more complex projects. Grateful for the trust and support from my team.',
-      date: new Date('2026-01-10'),
-      category: 'professional'
+      title: 'Uganda',
+      content: (
+          "My wife and I lived in Uganda for much of 2025. She was completing her clinical fellowship in " +
+          "Speech Pathology with Hope Speaks, while I worked with Rescue River—an organization that supports " +
+          "women who have survived trafficking or abuse by providing employment, teaching life skills, and offering " +
+          "discipleship.\n\nA few weeks before we left, we had the opportunity to visit a conservation center, where " +
+          "we were able to interact with some of the animals, including the lion cub I’m holding above. We’ve been " +
+          "back in the U.S. for about a month and a half now, and we’ve found ourselves missing the tropical climate " +
+          "just a little 😅."
+      ),
+      date: new Date('2026-01-3'),
+      category: ['personal', 'travel'],
+      image: '/update_images/ug.jpeg'
     },
-    {
-      title: 'Weekend Trip to Yosemite',
-      content: 'Spent an amazing weekend hiking in Yosemite National Park. The views were absolutely breathtaking, and it was the perfect way to disconnect and recharge. Nature always provides the best inspiration for creativity.',
-      date: new Date('2026-01-05'),
-      category: 'travel',
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop'
-    },
-    {
-      title: 'Launched New Portfolio Website',
-      content: 'Finally launched my redesigned portfolio website! Built with React, TypeScript, and Tailwind CSS. The new design better showcases my projects and includes a blog section for sharing my thoughts on development.',
-      date: new Date('2025-12-28'),
-      category: 'professional',
-      image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&h=400&fit=crop'
-    },
-    {
-      title: 'Completed React Advanced Patterns Course',
-      content: 'Just finished an intensive course on advanced React patterns including compound components, render props, and custom hooks. Already applying these patterns in my current projects with great results.',
-      date: new Date('2025-12-20'),
-      category: 'learning'
-    },
-    {
-      title: 'Adopted a Rescue Dog',
-      content: 'Meet Luna, my new rescue dog! She\'s a 2-year-old Golden Retriever mix who loves long walks and playing fetch. Having a furry companion has already brought so much joy to my daily routine.',
-      date: new Date('2025-12-15'),
-      category: 'personal',
-      image: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=600&h=400&fit=crop'
-    },
-    {
-      title: 'Speaking at Local Tech Meetup',
-      content: 'Had the opportunity to speak about "Building Accessible React Components" at our local React meetup. Great turnout and fantastic questions from the audience. Love sharing knowledge with the community!',
-      date: new Date('2025-12-10'),
-      category: 'professional'
-    },
-    {
-      title: 'Holiday Season Reflections',
-      content: 'As the year comes to an end, I\'m reflecting on all the growth and experiences of 2025. Grateful for new friendships, professional achievements, and the continuous journey of learning. Excited for what 2026 will bring!',
-      date: new Date('2025-12-05'),
-      category: 'personal'
-    }
   ];
 
   const categories = ['all', 'professional', 'personal', 'learning', 'travel'];
   const [selectedCategory, setSelectedCategory] = React.useState('all');
 
-  const filteredUpdates = selectedCategory === 'all'
-      ? updates
-      : updates.filter(update => update.category === selectedCategory);
+  const filteredUpdates =
+      selectedCategory === 'all'
+          ? updates : updates.filter(update =>
+              update.category.includes(selectedCategory)
+          );
+
 
   return (
       <div className="min-h-screen bg-background">
@@ -120,27 +101,6 @@ export default function Updates() {
                   <p className="text-muted-foreground text-lg">No updates found for this category.</p>
                 </div>
             )}
-
-            {/* Newsletter Signup */}
-            <section className="mt-16">
-              <div className="bg-card rounded-lg shadow-lg p-8 text-center">
-                <h2 className="text-2xl font-bold text-card-foreground mb-4">Stay Updated</h2>
-                <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                  Want to be notified when I share new updates? Subscribe to get the latest news
-                  about my projects, travels, and learning journey.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                  <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="flex-1 px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
-                  />
-                  <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                    Subscribe
-                  </button>
-                </div>
-              </div>
-            </section>
           </div>
         </main>
 
