@@ -51,9 +51,11 @@ export default function Home() {
                       <Download size={18} />
                       <span>Download Resume</span>
                     </a>
-                    <button className="border border-border text-foreground px-6 py-3 rounded-lg bg-gray-300 dark:bg-gray-500 hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors">
-                      Get In Touch
-                    </button>
+                    <a href="mailto:zane15myers@gmail.com">
+                      <button className="border border-border text-foreground px-6 py-3 rounded-lg bg-gray-300 dark:bg-gray-500 hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors">
+                        Get In Touch
+                      </button>
+                    </a>
                   </div>
                 </div>
 
