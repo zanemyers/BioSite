@@ -39,10 +39,10 @@ const Footer = () => {
               © 2026 Zane Myers. All rights reserved.
             </p>
             <div className="flex space-x-6 text-sm">
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a href="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
                 Privacy Policy
               </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a href="/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">
                 Terms of Service
               </a>
             </div>
