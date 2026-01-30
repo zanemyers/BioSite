@@ -5,10 +5,10 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Home from './src/pages/Home';
+import Home from './src/pages/Home/Home';
 import Resume from './src/pages/Resume';
-import Projects from './src/pages/Projects';
-import Updates from './src/pages/Updates';
+import Projects from './src/pages/Projects/Projects';
+import Updates from './src/pages/Updates/Updates';
 import Terms from './src/pages/Terms';
 import Privacy from './src/pages/Privacy';
 import NotFound from './src/pages/NotFound';

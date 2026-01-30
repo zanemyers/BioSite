@@ -1,7 +1,9 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import UpdateCard from '../components/UpdateCard';
+import Header from '../../components/Header.tsx';
+import Footer from '../../components/Footer.tsx';
+import UpdateCard from '../../components/UpdateCard.tsx';
+import jobHuntPicture from './imgs/jobHunt.jpg'
+import ugandaPicture from './imgs/uganda.jpeg'
 
 export default function Updates() {
   const updates = [
@@ -18,7 +20,7 @@ export default function Updates() {
       ),
       date: new Date('2026-01-3'),
       category: ['learning', 'professional'],
-      image: '/update_images/job-hunt.jpg'
+      image: jobHuntPicture,
     },
     {
       title: 'Uganda',
@@ -33,7 +35,7 @@ export default function Updates() {
       ),
       date: new Date('2026-01-3'),
       category: ['personal', 'travel'],
-      image: '/update_images/ug.jpeg'
+      image: ugandaPicture,
     },
   ];
 

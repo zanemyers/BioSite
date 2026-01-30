@@ -1,14 +1,17 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import ProjectCard from '../components/ProjectCard';
+import Header from '../../components/Header.tsx';
+import Footer from '../../components/Footer.tsx';
+import ProjectCard from '../../components/ProjectCard.tsx';
+import bioSitePicture from './imgs/bioSite.png'
+import budgeteerPicture from './imgs/budgeteer.jpg'
+import flyboxPicture from './imgs/flybox.png'
 
 export default function Projects() {
   const projects = [
     {
       title: 'Flybox',
       description: 'Flybox collects and aggregates fly-fishing shop data by scraping Google Maps and individual shop websites. It outputs structured, analyzable datasets that highlight online sales, fishing reports, and digital presence.',
-      image: '/project_images/flybox.png',
+      image: flyboxPicture,
       technologies: ['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'Bootstrap 5', 'Just', 'Docker', 'SCSS'],
       githubUrl: 'https://github.com/zanemyers/Flybox',
       liveUrl: 'https://flybox.zm1.org'
@@ -16,14 +19,14 @@ export default function Projects() {
     {
       title: 'Budgeteer (WIP)',
       description: 'An Idea for how to do budgets better.',
-      image: '/project_images/budgeteer.jpg',
+      image: budgeteerPicture,
       technologies: ['Python', 'Django', 'JavaScript', 'SCSS', 'Just', 'HTML'],
       githubUrl: 'https://github.com/zanemyers/Budgeteer',
     },
     {
       title: 'BioSite',
       description: "A website all about me! And guess what... you're already there!",
-      image: '/project_images/bioSite.png',
+      image: bioSitePicture,
       technologies: ['React', 'Typescript', 'Tailwind CSS'],
       githubUrl: 'https://github.com/zanemyers/BioSite',
       liveUrl: 'https://zm1.org'

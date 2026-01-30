@@ -1,7 +1,10 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import SkillCard from '../components/SkillsCard';
+import Header from '../../components/Header.tsx';
+import Footer from '../../components/Footer.tsx';
+import SkillCard from '../../components/SkillsCard.tsx';
+import profilePicture from './imgs/profile.jpg'
+import aboutMePicture from './imgs/about_me.jpg'
+
 import { Download, MapPin, Calendar } from 'lucide-react';
 
 const frontendSkills = [
@@ -62,7 +65,7 @@ export default function Home() {
                 <div className="flex justify-center lg:justify-end">
                   <div className="w-80 h-80 rounded-full overflow-hidden shadow-2xl">
                     <img
-                        src="/about_me/profile.jpg"
+                        src={profilePicture}
                         alt="Profile"
                         className="w-full h-full object-cover"
                     />
@@ -78,7 +81,7 @@ export default function Home() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
                   <img
-                      src="/about_me/about_me.jpg"
+                      src={aboutMePicture}
                       alt="My Family"
                       className="rounded-lg shadow-lg"
                   />
