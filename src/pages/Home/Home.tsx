@@ -1,11 +1,11 @@
 import React from 'react';
-import Header from '../../components/Header.tsx';
-import Footer from '../../components/Footer.tsx';
-import SkillCard from '../../components/SkillsCard.tsx';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import SkillCard from '../../components/SkillsCard';
 import profilePicture from './imgs/profile.jpg'
 import aboutMePicture from './imgs/about_me.jpg'
 
-import { Download, MapPin, Calendar } from 'lucide-react';
+import {Download, MapPin, BriefcaseBusiness} from 'lucide-react';
 
 const frontendSkills = [
   { name: 'React', level: 60 },
@@ -103,11 +103,11 @@ export default function Home() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
                     <div className="flex items-center space-x-3">
                       <MapPin size={20} className="text-blue-600" />
-                      <span className="text-foreground">Manhattan, Kansas</span>
+                      <span className="text-foreground">St. George, Kansas</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Calendar size={20} className="text-blue-600" />
-                      <span className="text-foreground">Available for work</span>
+                      <BriefcaseBusiness size={20} className="text-blue-600" />
+                      <span className="text-foreground">Application Developer at Aprio</span>
                     </div>
                   </div>
                 </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 
-interface UpdateCardProps {
+export interface UpdateCardProps {
   title: string;
   content: string;
   date: Date;
