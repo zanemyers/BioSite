@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './src/pages/Home/Home';
-import Resume from './src/pages/Resume';
+import Resume from './src/pages/Resume/Resume.tsx';
 import Projects from './src/pages/Projects/Projects';
 import Updates from './src/pages/Updates/Updates';
 import Terms from './src/pages/Terms';

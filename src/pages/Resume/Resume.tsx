@@ -1,55 +1,14 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import { Download, Calendar, MapPin, Mail, Phone, Globe } from 'lucide-react';
+import Header from '../../components/Header.tsx';
+import Footer from '../../components/Footer.tsx';
+import JobEntry from "../../components/JobEntry.tsx";
+import { Calendar, Download, MapPin, Mail, Phone, Globe } from 'lucide-react';
+import { jobs, volunteering } from "./jobEntries.ts"
 
 const frontendSkills = ["React", "Vue.js", "TypeScript", "Javascript", "HTML", "CSS", "Bootstrap 5", ];
 const backendSkills = ["Python", "Django", "Node.js", "Express.js", "Rest APIs", "PostgreSQL", "MySQL"];
 const otherSkills = ["Git", "Docker", "Playwright", "Just"]
 const interests = ["Web Development", "App Development (IOS)", "AI Integrations", "Mentorship & Personal Development", "International Missions & Travel"]
-
-const jobColorMap = {
-  blue: { border: 'border-blue-600', text: 'text-blue-600' },
-  green: { border: 'border-green-600', text: 'text-green-600' },
-  purple: { border: 'border-purple-600', text: 'text-purple-600' },
-} as const;
-
-interface JobProps {
-  color: "blue" | "green" | "purple";
-  title: string;
-  company: string;
-  from: string;
-  to: string;
-  location: string;
-  children?: React.ReactNode
-}
-
-const JobEntry = (props: JobProps) => {
-  const color = jobColorMap[props.color] || jobColorMap.blue;
-
-  return (
-    <div className="space-y-6 mt-4">
-      <div className={`border-l-4 pl-6 ${color.border}`}>
-        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
-          <div>
-            <h3 className="text-xl font-semibold text-card-foreground">{props.title}</h3>
-            <p className={`${color.text} font-medium`}>{props.company}</p>
-          </div>
-          <div className="flex flex-col text-muted-foreground text-sm mt-1 md:mt-0 md:items-end">
-            <div className="flex items-center">
-              <Calendar size={16} className="mr-1 shrink-0"/>
-              <span>{props.from} – {props.to}</span>
-            </div>
-            <div className="mt-0.5">{props.location}</div>
-          </div>
-        </div>
-        <ul className="list-disc list-outside text-muted-foreground space-y-2 mt-3">
-          {props.children}
-        </ul>
-      </div>
-    </div>
-  )
-}
 
 const skillColorMap = {
   blue: { bg: 'bg-blue-100', text: 'text-blue-800' },
@@ -129,7 +88,7 @@ export default function Resume() {
                     <MapPin size={16} />
                   </span>
                   <span className="whitespace-nowrap">
-                    Manhattan, KS
+                    St. George, KS
                   </span>
                 </div>
 
@@ -152,7 +111,7 @@ export default function Resume() {
               <h2 className="text-2xl font-bold text-card-foreground mb-4">Professional Summary</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Software developer with 2+ years of full-stack experience building web applications
-                using Django, Vue.js, React, and Node.js. Experienced in automating workflows,
+                using Python, Django, Vue.js, React, and Node.js. Experienced in automating workflows,
                 integrating Al tools, and maintaining CI/CD pipelines. Proven collaborator with a passion
                 for clean, maintainable code, mentorship, and user-focused design.
               </p>
@@ -163,63 +122,14 @@ export default function Resume() {
               <h2 className="text-2xl font-bold text-card-foreground mb-6">Professional Experience</h2>
 
               <div className="space-y-8">
-                <JobEntry color="blue" title="Software Engineer (Volunteer)" company="Rescue River" from="Mar 2025" to="Nov 2025" location="Kampala, Uganda">
-                  <li>
-                    Built a full-stack Node/Express.js and React app with an intuitive interface that made scraper management and data automation accessible to non-technical users.
-                  </li>
-                  <li>
-                    Developed a Playwright scraper to collect sales and marketing data from 100+ Google Maps listings per run, with location targeting and structured Excel exports.
-                  </li>
-                  <li>
-                    Engineered a fishing report aggregator with Excel input, Playwright scraping, and AI summarization, reducing hours of manual gathering into minutes.
-                  </li>
-                  <li>
-                    Developed a comparison utility to align scraper outputs and inputs, closing data gaps.
-                  </li>
-                  <li>
-                    Authored setup and usage docs to streamline on-boarding and maintenance.
-                  </li>
-                </JobEntry>
-
-                <JobEntry color="green" title="Software Engineer" company="Canopy" from="Feb 2023" to="Jan 2025" location="Manhattan, Kansas">
-                  <li>
-                    Helped design, build, and maintain a multi-sheet Excel import feature in Django/ Python, simplifying bulk data entry and automating manual workflows.
-                  </li>
-                  <li>
-                    Diagnosed and optimized SQL queries and API responses, achieving sub-second average page load times.
-                  </li>
-                  <li>
-                    Collaborated with product managers and client success teams to refine workflows and resolve critical bugs, improving overall user experience.
-                  </li>
-                  <li>
-                    Engaged in weekly peer code reviews and provided constructive feedback, strengthening overall code quality and accelerating feature delivery.
-                  </li>
-                  <li>
-                    Mentored a student developer through weekly code reviews and pair programming, supporting their growth both as a software engineer and a professional.
-                  </li>
-                </JobEntry>
-
-                <JobEntry color="purple" title="Ministry Intern" company="Student Mobilization" from="June 2022" to="July 2022" location="Manhattan, Kansas">
-                  <li>
-                    Organized 5+ community events with (20–30 participants each) with a collaborative team.
-                  </li>
-                  <li>
-                    Fostered relationships with 10-20 college students through weekly texts, meetups, and faith-based conversations.
-                  </li>
-                </JobEntry>
+                {jobs.filter(j => !j.olderExperience).map(job => <JobEntry key={job.title} {...job}/>)}
 
                 <details className="mt-6">
                   <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-card-foreground">
                     Older Experience
                   </summary>
 
-                  <JobEntry color="blue" title="Crew Member" company="Cold Stone Creamery" from="Mar 2022" to="Oct 2022" location="Manhattan, Kansas">
-                    <li>Served 50+ customers nightly with fast, friendly service.</li>
-                  </JobEntry>
-
-                  <JobEntry color="green" title="Community Assistant" company="Kansas State University" from="Aug 2019" to="May 2022" location="Manhattan, Kansas">
-                    <li>Provided essential daily and emergency support to 500+ residents.</li>
-                  </JobEntry>
+                  {jobs.filter(j => j.olderExperience).map(job => <JobEntry key={job.title} {...job}/>)}
                 </details>
 
               </div>
@@ -261,17 +171,7 @@ export default function Resume() {
               <h2 className="text-2xl font-bold text-card-foreground mb-6">Volunteering</h2>
 
               <div className="space-y-8">
-                <JobEntry color="blue" title="Therapy Technician" company="Hope Speaks" from="June 2025" to="July 2025" location="Kampala, Uganda">
-                  <li>Assisted speech therapist with toileting children and transporting them between sessions.</li>
-                  <li>Computed averages from session data to assist in progress tracking.</li>
-                  <li>Engaged children in play-based therapy activities.</li>
-                </JobEntry>
-
-                <JobEntry color="green" title="Youth Leader" company="Faith Manhattan Church" from="Sep 2019" to="Jan 2025" location="Manhattan, Kansas">
-                  <li>Facilitated weekly high school small group discussions.</li>
-                  <li>Led and supported preschool Sunday school.</li>
-                  <li>Participated as an adult sponsor on a mission trip to Ghana.</li>
-                </JobEntry>
+                {volunteering.map(v => (<JobEntry key={v.title} {...v}/>))}
               </div>
             </section>
 
