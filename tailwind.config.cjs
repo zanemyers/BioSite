@@ -18,7 +18,6 @@ module.exports = {
         extend: {
             colors: {
                 border: 'hsl(var(--border))',
-                input: 'hsl(var(--input))',
                 ring: 'hsl(var(--ring))',
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
@@ -45,9 +44,7 @@ module.exports = {
                 md: 'calc(var(--radius) - 2px)',
                 sm: 'calc(var(--radius) - 4px)'
             },
-boxShadow: {
-                "2xs": "var(--shadow-2xs)",
-                xs: "var(--shadow-xs)",
+            boxShadow: {
                 sm: "var(--shadow-sm)",
                 md: "var(--shadow-md)",
                 lg: "var(--shadow-lg)",

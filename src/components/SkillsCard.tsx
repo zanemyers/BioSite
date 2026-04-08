@@ -1,5 +1,3 @@
-import React from "react";
-
 interface Skills {
     name: string;
     level: number;
