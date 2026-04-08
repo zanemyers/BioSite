@@ -73,7 +73,7 @@ const Header = () => {
                 <div className="py-3 px-4 flex items-center justify-between">
                   <div>
                     <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-lg font-semibold text-foreground">
-                      Your Name
+                      Zane Myers
                     </Link>
                   </div>
                   <div>

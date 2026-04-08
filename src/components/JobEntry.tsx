@@ -39,11 +39,13 @@ export default function JobEntry (props: JobProps) {
                         <div className="mt-0.5">{props.location}</div>
                     </div>
                 </div>
-                <ul className="list-disc list-outside text-muted-foreground mt-3">
-                    {props.experiences.map((experience, index) => (
-                        <li className="ms-3.5" key={index}>{experience}</li>
-                    ))}
-                </ul>
+                {props.experiences.length > 0 && (
+                    <ul className="list-disc list-outside text-muted-foreground mt-3">
+                        {props.experiences.map((experience) => (
+                            <li className="ms-3.5" key={experience}>{experience}</li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
     )

@@ -2,9 +2,9 @@ import React from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import ProjectCard from '../../components/ProjectCard';
-import bioSitePicture from './imgs/bioSite.png'
+import bioSitePicture from './imgs/bioSite.jpg'
 import budgeteerPicture from './imgs/budgeteer.jpg'
-import flyboxPicture from './imgs/flybox.png'
+import flyboxPicture from './imgs/flybox.jpg'
 
 export default function Projects() {
   const projects = [
@@ -57,6 +57,7 @@ export default function Projects() {
                     <img
                         src={projects[0].image}
                         alt={projects[0].title}
+                        loading="lazy"
                         className="w-full h-full object-cover"
                     />
                   </div>
@@ -69,7 +70,7 @@ export default function Projects() {
                       {projects[0].technologies.map((tech) => (
                           <span
                               key={tech}
-                              className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                              className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-sm rounded-full"
                           >
                         {tech}
                       </span>
@@ -78,13 +79,17 @@ export default function Projects() {
                     <div className="flex space-x-4">
                       <a
                           href={projects[0].githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                       >
                         View Code
                       </a>
                       <a
                           href={projects[0].liveUrl}
-                          className="border border-border text-foreground px-6 py-3 rounded-lg border-gray-300  hover:bg-gray-300 dark:hover:text-black transition-colors"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="border border-border text-foreground px-6 py-3 rounded-lg border-gray-300 hover:bg-gray-300 dark:hover:text-black transition-colors"
                       >
                         Live Demo
                       </a>
@@ -98,9 +103,9 @@ export default function Projects() {
             <section>
               <h2 className="text-2xl font-bold text-foreground mb-8">All Projects</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {projects.slice(1).map((project, index) => (
+                {projects.slice(1).map((project) => (
                     <ProjectCard
-                        key={index}
+                        key={project.title}
                         title={project.title}
                         description={project.description}
                         image={project.image}
@@ -120,10 +125,11 @@ export default function Projects() {
                   I'm always open to discussing new opportunities and interesting projects.
                   Let's connect and see how we can create something amazing together.
                 </p>
-                <a href="mailto:zane15myers@gmail.com">
-                <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                <a
+                    href="mailto:zane15myers@gmail.com"
+                    className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+                >
                   Get In Touch
-                </button>
                 </a>
               </div>
             </section>

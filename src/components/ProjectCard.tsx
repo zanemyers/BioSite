@@ -1,4 +1,3 @@
-import React from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 
 interface Props {
@@ -17,6 +16,7 @@ const  ProjectCard = (props: Props) => {
           <img
               src={props.image}
               alt={props.title}
+              loading="lazy"
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
           />
         </div>
@@ -29,7 +29,7 @@ const  ProjectCard = (props: Props) => {
             {props.technologies.map((tech) => (
                 <span
                     key={tech}
-                    className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                    className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-sm rounded-full"
                 >
               {tech}
             </span>
@@ -40,6 +40,8 @@ const  ProjectCard = (props: Props) => {
             {props.githubUrl && (
                 <a
                     href={props.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center space-x-2 text-muted-foreground hover:text-card-foreground transition-colors"
                     aria-label={`View ${props.title} on GitHub`}
                 >
@@ -50,6 +52,8 @@ const  ProjectCard = (props: Props) => {
             {props.liveUrl && (
                 <a
                     href={props.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors"
                     aria-label={`View ${props.title} live demo`}
                 >

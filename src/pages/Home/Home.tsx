@@ -54,10 +54,11 @@ export default function Home() {
                       <Download size={18} />
                       <span>Download Resume</span>
                     </a>
-                    <a href="mailto:zane15myers@gmail.com">
-                      <button className="border border-border text-foreground px-6 py-3 rounded-lg bg-gray-300 dark:bg-gray-500 hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors">
-                        Get In Touch
-                      </button>
+                    <a
+                        href="mailto:zane15myers@gmail.com"
+                        className="border border-border text-foreground px-6 py-3 rounded-lg bg-gray-300 dark:bg-gray-500 hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors"
+                    >
+                      Get In Touch
                     </a>
                   </div>
                 </div>
@@ -67,6 +68,7 @@ export default function Home() {
                     <img
                         src={profilePicture}
                         alt="Profile"
+                        loading="eager"
                         className="w-full h-full object-cover"
                     />
                   </div>
@@ -83,6 +85,7 @@ export default function Home() {
                   <img
                       src={aboutMePicture}
                       alt="My Family"
+                      loading="lazy"
                       className="rounded-lg shadow-lg"
                   />
                 </div>

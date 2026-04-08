@@ -180,7 +180,7 @@ export default function Resume() {
               <h2 className="text-2xl font-bold text-card-foreground mb-6">Interests</h2>
               <div className="flex flex-wrap gap-2">
                 {interests.map((skill) => (
-                    <span key={skill} className={`px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full`}>
+                    <span key={skill} className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-sm rounded-full">
                       {skill}
                     </span>
                 ))}

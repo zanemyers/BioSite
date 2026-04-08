@@ -52,9 +52,9 @@ export default function Updates() {
 
             {/* Updates Grid */}
             <div className="space-y-8">
-              {filteredUpdates.map((update, index) => (
+              {filteredUpdates.map((update) => (
                   <UpdateCard
-                      key={index}
+                      key={update.title}
                       title={update.title}
                       content={update.content}
                       date={update.date}

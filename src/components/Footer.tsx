@@ -1,4 +1,3 @@
-import React from 'react';
 import { Github, Linkedin, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -25,7 +24,9 @@ const Footer = () => {
                     <a
                         key={link.name}
                         href={link.href}
-                        className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-blue-100"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-secondary"
                         aria-label={link.name}
                     >
                       <Icon size={20} />

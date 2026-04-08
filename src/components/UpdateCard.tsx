@@ -1,6 +1,5 @@
 import React from 'react';
 import { Calendar } from 'lucide-react';
-import { format } from 'date-fns';
 
 export interface UpdateCardProps {
   title: string;
@@ -18,11 +17,11 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
                                                  image
                                                }) => {
   const categoryColors = {
-    personal: 'bg-green-100 text-green-800',
-    professional: 'bg-blue-100 text-blue-800',
-    travel: 'bg-purple-100 text-purple-800',
-    learning: 'bg-orange-100 text-orange-800',
-    default: 'bg-gray-100 text-gray-800'
+    personal: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+    professional: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+    travel: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+    learning: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+    default: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
   };
 
   return (
@@ -32,6 +31,7 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
               <img
                   src={image}
                   alt={title}
+                  loading="lazy"
                   className="w-full h-full object-cover"
               />
             </div>
@@ -52,7 +52,7 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
 
             <div className="flex items-center text-muted-foreground text-sm">
               <Calendar size={16} className="mr-1" />
-              {format(date, 'MMM dd, yyyy')}
+              {date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
             </div>
           </div>
 
