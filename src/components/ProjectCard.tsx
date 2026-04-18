@@ -7,6 +7,7 @@ interface Props {
   technologies: string[];
   githubUrl?: string;
   liveUrl?: string;
+  deprecated?: boolean;
 }
 
 const  ProjectCard = (props: Props) => {
@@ -22,7 +23,14 @@ const  ProjectCard = (props: Props) => {
         </div>
 
         <div className="p-6">
-          <h3 className="text-xl font-semibold text-card-foreground mb-2">{props.title}</h3>
+          <div className="flex items-center gap-2 mb-2">
+            <h3 className="text-xl font-semibold text-card-foreground">{props.title}</h3>
+            {props.deprecated && (
+              <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 text-xs rounded-full font-medium">
+                Deprecated
+              </span>
+            )}
+          </div>
           <p className="text-muted-foreground mb-4 line-clamp-3">{props.description}</p>
 
           <div className="flex flex-wrap gap-2 mb-4">

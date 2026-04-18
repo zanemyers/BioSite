@@ -7,6 +7,18 @@ import * as imgs from './imgs/index'
 
 export const updates: UpdateCardProps[] = [
     {
+        title: 'Flybox 2.0',
+        content: (
+            "A while back I built Flybox — a tool that scraped Google Maps and fly-fishing shop websites to aggregate data about shops, fishing reports, and their digital presence. But, overtime it grew complicated: a separate React frontend, an Express backend, three standalone tools (ShopReel, FishTales, and SiteScout) each living in their own /apps directory, Bootstrap with SCSS, and ESLint and Prettier configured separately. It worked, but it had accumulated a lot of structure for what was ultimately a focused task.\n\n" +
+            "Flybox 2.0 collapses all of that into a single Next.js app. The Express server is gone — Next.js handles the API routes. The three-tool split is gone — it's one cohesive flow. Bootstrap and SCSS are replaced with Tailwind and DaisyUI. ESLint and Prettier are replaced with Biome. The core — SerpAPI for shop discovery, Google Gemini for summarizing reports, Prisma for persistence — stayed the same. Playwright is still there for pages that need a real browser, but most scraping now runs through Cheerio, which is significantly faster since it parses static HTML without spinning up a headless browser. It just all lives in one place now.\n\n" +
+            "I also leaned on Claude throughout the rebuild, mostly as a thinking partner for architecture decisions and getting Vitest set up. It made the process feel more like pairing than grinding through it alone.\n\n" +
+            "The result is a smaller codebase that does everything v1 did, with less to maintain and a lot less mental overhead."
+        ),
+        date: new Date(2026, 3, 17),
+        category: ['professional', 'learning'],
+        image: imgs.Flybox2
+    },
+    {
         title: 'New Home!',
         content: (
             "We moved into our new home about a week and a half ago and are finally starting to get settled. It’s been " +

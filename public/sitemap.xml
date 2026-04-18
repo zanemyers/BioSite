@@ -20,7 +20,7 @@
     <!-- Projects -->
     <url>
         <loc>https://zm1.org/projects/</loc>
-        <lastmod>2026-01-04</lastmod>
+        <lastmod>2026-04-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -28,7 +28,7 @@
     <!-- Updates -->
     <url>
         <loc>https://zm1.org/updates/</loc>
-        <lastmod>2026-02-01</lastmod>
+        <lastmod>2026-04-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>

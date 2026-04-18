@@ -4,16 +4,19 @@ import ProjectCard from '../../components/ProjectCard';
 import bioSitePicture from './imgs/bioSite.jpg'
 import budgeteerPicture from './imgs/budgeteer.jpg'
 import flyboxPicture from './imgs/flybox.jpg'
+import flybox2DarkPicture from './imgs/flybox2_dark.jpg'
+import flybox2LightPicture from './imgs/flybox2_light.jpg'
 
 export default function Projects() {
   const projects = [
     {
-      title: 'Flybox',
-      description: 'Flybox collects and aggregates fly-fishing shop data by scraping Google Maps and individual shop websites. It outputs structured, analyzable datasets that highlight online sales, fishing reports, and digital presence.',
-      image: flyboxPicture,
-      technologies: ['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'Bootstrap 5', 'Just', 'Docker', 'SCSS'],
-      githubUrl: 'https://github.com/zanemyers/Flybox',
-      liveUrl: 'https://flybox.zm1.org'
+      title: 'Flybox 2.0',
+      description: 'A fly-fishing shop locator and report aggregator built with Next.js. Searches Google Maps for fly-fishing shops, scrapes contact info and fishing report links, then uses Google Gemini to summarize findings. Users can download a summarized report and shop directory.',
+      image: flybox2LightPicture,
+      imageDark: flybox2DarkPicture,
+      technologies: ['Next.js', 'TypeScript', 'PostgreSQL', 'Prisma', 'Google Gemini', 'SerpAPI', 'Leaflet', 'Docker'],
+      githubUrl: 'https://github.com/zanemyers/Flybox-2.0',
+      liveUrl: 'https://flybox.zm1.org',
     },
     {
       title: 'Budgeteer (WIP)',
@@ -26,9 +29,17 @@ export default function Projects() {
       title: 'BioSite',
       description: "A website all about me! And guess what... you're already there!",
       image: bioSitePicture,
-      technologies: ['React', 'Typescript', 'Tailwind CSS'],
+      technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Radix UI', 'React Router'],
       githubUrl: 'https://github.com/zanemyers/BioSite',
       liveUrl: 'https://zm1.org'
+    },
+    {
+      title: 'Flybox',
+      description: 'Flybox collects and aggregates fly-fishing shop data by scraping Google Maps and individual shop websites. It outputs structured, analyzable datasets that highlight online sales, fishing reports, and digital presence.',
+      image: flyboxPicture,
+      technologies: ['TypeScript', 'JavaScript', 'SCSS', 'Docker', 'Just'],
+      githubUrl: 'https://github.com/zanemyers/Flybox',
+      deprecated: true,
     },
   ];
 
@@ -57,8 +68,16 @@ export default function Projects() {
                         src={projects[0].image}
                         alt={projects[0].title}
                         loading="lazy"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover dark:hidden"
                     />
+                    {'imageDark' in projects[0] && (
+                      <img
+                          src={projects[0].imageDark}
+                          alt={projects[0].title}
+                          loading="lazy"
+                          className="w-full h-full object-cover hidden dark:block"
+                      />
+                    )}
                   </div>
                   <div className="p-8 lg:p-12 flex flex-col justify-center">
                     <h3 className="text-3xl font-bold text-card-foreground mb-4">{projects[0].title}</h3>
@@ -111,6 +130,7 @@ export default function Projects() {
                         technologies={project.technologies}
                         githubUrl={project.githubUrl}
                         liveUrl={project.liveUrl}
+                        deprecated={'deprecated' in project ? project.deprecated : undefined}
                     />
                 ))}
               </div>
