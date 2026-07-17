@@ -16,7 +16,7 @@
     "postcss": "^8.5.14",
     "react": "^19.2.5",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.16.0",
+    "react-router-dom": "^7.18.1",
     "tailwindcss": "^4.2.4",
     "vite": "^7.3.6"
   },
