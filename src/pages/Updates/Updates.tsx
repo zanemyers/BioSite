@@ -60,6 +60,7 @@ export default function Updates() {
                       date={update.date}
                       category={update.category}
                       image={update.image}
+                      imagePosition={update.imagePosition}
                   />
               ))}
             </div>

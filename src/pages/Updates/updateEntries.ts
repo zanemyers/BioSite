@@ -7,6 +7,19 @@ import * as imgs from './imgs/index'
 
 export const updates: UpdateCardProps[] = [
     {
+        title: 'The Year I Turned 27 — and Became a Dad',
+        content: (
+            "I turned 27 recently, and it’s hard not to notice how different life looks from a year ago. In the last twelve months, we came back from Uganda, I started a new job, we moved into a new home, and — most significantly — we became parents this April. Any one of those on its own would have made for a full year. Stacked together, they’ve reshaped almost every part of daily life.\n\n" +
+            "Becoming a dad is the change I’m still catching up to. It’s the kind of thing people try to describe to you beforehand, but nothing quite prepares you for the shift. The days are slower and faster at the same time. Priorities rearrange themselves without you asking, and small, ordinary moments carry a different weight now.\n\n" +
+            "27 feels less like a birthday and more like a marker — a point to look back from and see how much has been given. I’m grateful for this season, for the people in it, and for the quiet work God has done to bring us here. As I look back, it's easier to see all the goodness this year brought — though in many moments the stress, struggle, and hardship felt overwhelming. " +
+            "One thing my wife said early this year that stuck with me was that it's hard to appreciate the ocean when you're treading water. It's true this last year was hard, but it was also one of the most amazing adventures of my life."
+        ),
+        date: new Date(2026, 6, 17),
+        category: ['personal'],
+        image: imgs.Dad,
+        imagePosition: 'side'
+    },
+    {
         title: 'Flybox 2.0',
         content: (
             "A while back I built Flybox — a tool that scraped Google Maps and fly-fishing shop websites to aggregate data about shops, fishing reports, and their digital presence. But, overtime it grew complicated: a separate React frontend, an Express backend, three standalone tools (ShopReel, FishTales, and SiteScout) each living in their own /apps directory, Bootstrap with SCSS, and ESLint and Prettier configured separately. It worked, but it had accumulated a lot of structure for what was ultimately a focused task.\n\n" +
