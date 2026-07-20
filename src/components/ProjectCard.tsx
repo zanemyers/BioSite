@@ -1,4 +1,4 @@
-import { ExternalLink, Github } from 'lucide-react';
+import { FiExternalLink, FiGithub } from 'react-icons/fi';
 
 interface Props {
   title: string;
@@ -10,68 +10,68 @@ interface Props {
   deprecated?: boolean;
 }
 
-const  ProjectCard = (props: Props) => {
+const ProjectCard = (props: Props) => {
   return (
-      <div className="bg-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <div className="aspect-video overflow-hidden">
-          <img
-              src={props.image}
-              alt={props.title}
-              loading="lazy"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-          />
+    <div className="bg-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+      <div className="aspect-video overflow-hidden">
+        <img
+          src={props.image}
+          alt={props.title}
+          loading="lazy"
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+
+      <div className="p-6">
+        <div className="flex items-center gap-2 mb-2">
+          <h3 className="text-xl font-semibold text-card-foreground">{props.title}</h3>
+          {props.deprecated && (
+            <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 text-xs rounded-full font-medium">
+              Deprecated
+            </span>
+          )}
         </div>
+        <p className="text-muted-foreground mb-4 line-clamp-3">{props.description}</p>
 
-        <div className="p-6">
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-xl font-semibold text-card-foreground">{props.title}</h3>
-            {props.deprecated && (
-              <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 text-xs rounded-full font-medium">
-                Deprecated
-              </span>
-            )}
-          </div>
-          <p className="text-muted-foreground mb-4 line-clamp-3">{props.description}</p>
-
-          <div className="flex flex-wrap gap-2 mb-4">
-            {props.technologies.map((tech) => (
-                <span
-                    key={tech}
-                    className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-sm rounded-full"
-                >
+        <div className="flex flex-wrap gap-2 mb-4">
+          {props.technologies.map((tech) => (
+            <span
+              key={tech}
+              className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-sm rounded-full"
+            >
               {tech}
             </span>
-            ))}
-          </div>
+          ))}
+        </div>
 
-          <div className="flex space-x-4">
-            {props.githubUrl && (
-                <a
-                    href={props.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center space-x-2 text-muted-foreground hover:text-card-foreground transition-colors"
-                    aria-label={`View ${props.title} on GitHub`}
-                >
-                  <Github size={18} />
-                  <span className="text-sm">Code</span>
-                </a>
-            )}
-            {props.liveUrl && (
-                <a
-                    href={props.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors"
-                    aria-label={`View ${props.title} live demo`}
-                >
-                  <ExternalLink size={18} />
-                  <span className="text-sm">Live Demo</span>
-                </a>
-            )}
-          </div>
+        <div className="flex space-x-4">
+          {props.githubUrl && (
+            <a
+              href={props.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 text-muted-foreground hover:text-card-foreground transition-colors"
+              aria-label={`View ${props.title} on GitHub`}
+            >
+              <FiGithub size={18} />
+              <span className="text-sm">Code</span>
+            </a>
+          )}
+          {props.liveUrl && (
+            <a
+              href={props.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors"
+              aria-label={`View ${props.title} live demo`}
+            >
+              <FiExternalLink size={18} />
+              <span className="text-sm">Live Demo</span>
+            </a>
+          )}
         </div>
       </div>
+    </div>
   );
 };
 

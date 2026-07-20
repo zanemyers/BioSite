@@ -1,15 +1,11 @@
-import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   server: {
     allowedHosts: true,
-  },
-  esbuild: {
-    logOverride: {
-      'ignored-directive': 'silent',
-    },
   },
   logLevel: 'info',
   build: {
@@ -17,9 +13,9 @@ export default defineConfig({
       onwarn(warning, warn) {
         // ignore certain harmless warnings
         if (
-            warning.message.includes('Module level directives') ||
-            warning.message.includes('"use client"')  ||
-            warning.message.includes('"was ignored"')
+          warning.message.includes('Module level directives') ||
+          warning.message.includes('"use client"') ||
+          warning.message.includes('"was ignored"')
         ) {
           return;
         }

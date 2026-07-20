@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sun, Moon } from 'lucide-react';
+import { FiMoon, FiSun } from 'react-icons/fi';
 
 const ThemeToggle: React.FC = () => {
   const [isDark, setIsDark] = React.useState<boolean>(() => {
@@ -47,12 +47,13 @@ const ThemeToggle: React.FC = () => {
 
   return (
     <button
+      type="button"
       onClick={toggleTheme}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={isDark ? 'Light mode' : 'Dark mode'}
       className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
     >
-      {isDark ? <Sun size={18} /> : <Moon size={18} />}
+      {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
     </button>
   );
 };
