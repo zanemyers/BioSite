@@ -1,175 +1,256 @@
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
+import { FiArrowUpRight, FiExternalLink, FiGithub } from 'react-icons/fi';
 import ProjectCard from '../../components/ProjectCard';
+import Button from '../../components/ui/Button';
+import Reveal from '../../components/ui/Reveal';
+import SectionHeading, { Eyebrow } from '../../components/ui/SectionHeading';
+import Tag from '../../components/ui/Tag';
+import { mailto } from '../../siteConfig';
 import bioSitePicture from './imgs/bioSite.jpg';
 import budgeteerPicture from './imgs/budgeteer.jpg';
 import flyboxPicture from './imgs/flybox.jpg';
 import flybox2DarkPicture from './imgs/flybox2_dark.jpg';
 import flybox2LightPicture from './imgs/flybox2_light.jpg';
 
+interface Project {
+  title: string;
+  description: string;
+  image: string;
+  /** Dark-mode variant. Both images render; `dark:hidden` / `not-dark:hidden` pick one. */
+  imageDark?: string;
+  technologies: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+  deprecated?: boolean;
+}
+
+/** The first entry is rendered as the featured hero; the rest fill the grid. */
+const projects: Project[] = [
+  {
+    title: 'Flybox 2.0',
+    description:
+      'A fly-fishing shop locator and report aggregator built with Next.js. Searches Google Maps for fly-fishing shops, scrapes contact info and fishing report links, then uses Google Gemini to summarize findings. Users can download a summarized report and shop directory.',
+    image: flybox2LightPicture,
+    imageDark: flybox2DarkPicture,
+    technologies: [
+      'Next.js',
+      'TypeScript',
+      'PostgreSQL',
+      'Prisma',
+      'Google Gemini',
+      'SerpAPI',
+      'Leaflet',
+      'Docker',
+    ],
+    githubUrl: 'https://github.com/zanemyers/Flybox-2.0',
+    liveUrl: 'https://flybox.zm1.org',
+  },
+  {
+    title: 'Budgeteer (WIP)',
+    description: 'An Idea for how to do budgets better.',
+    image: budgeteerPicture,
+    technologies: ['Python', 'Django', 'JavaScript', 'SCSS', 'Just', 'HTML'],
+    githubUrl: 'https://github.com/zanemyers/Budgeteer',
+  },
+  {
+    title: 'BioSite',
+    description: "A website all about me! And guess what... you're already there!",
+    image: bioSitePicture,
+    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'React Router'],
+    githubUrl: 'https://github.com/zanemyers/BioSite',
+    liveUrl: 'https://zm1.org',
+  },
+  {
+    title: 'Flybox',
+    description:
+      'Flybox collects and aggregates fly-fishing shop data by scraping Google Maps and individual shop websites. It outputs structured, analyzable datasets that highlight online sales, fishing reports, and digital presence.',
+    image: flyboxPicture,
+    technologies: ['TypeScript', 'JavaScript', 'SCSS', 'Docker', 'Just'],
+    githubUrl: 'https://github.com/zanemyers/Flybox',
+    deprecated: true,
+  },
+];
+
 export default function Projects() {
-  const projects = [
-    {
-      title: 'Flybox 2.0',
-      description:
-        'A fly-fishing shop locator and report aggregator built with Next.js. Searches Google Maps for fly-fishing shops, scrapes contact info and fishing report links, then uses Google Gemini to summarize findings. Users can download a summarized report and shop directory.',
-      image: flybox2LightPicture,
-      imageDark: flybox2DarkPicture,
-      technologies: [
-        'Next.js',
-        'TypeScript',
-        'PostgreSQL',
-        'Prisma',
-        'Google Gemini',
-        'SerpAPI',
-        'Leaflet',
-        'Docker',
-      ],
-      githubUrl: 'https://github.com/zanemyers/Flybox-2.0',
-      liveUrl: 'https://flybox.zm1.org',
-    },
-    {
-      title: 'Budgeteer (WIP)',
-      description: 'An Idea for how to do budgets better.',
-      image: budgeteerPicture,
-      technologies: ['Python', 'Django', 'JavaScript', 'SCSS', 'Just', 'HTML'],
-      githubUrl: 'https://github.com/zanemyers/Budgeteer',
-    },
-    {
-      title: 'BioSite',
-      description: "A website all about me! And guess what... you're already there!",
-      image: bioSitePicture,
-      technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Radix UI', 'React Router'],
-      githubUrl: 'https://github.com/zanemyers/BioSite',
-      liveUrl: 'https://zm1.org',
-    },
-    {
-      title: 'Flybox',
-      description:
-        'Flybox collects and aggregates fly-fishing shop data by scraping Google Maps and individual shop websites. It outputs structured, analyzable datasets that highlight online sales, fishing reports, and digital presence.',
-      image: flyboxPicture,
-      technologies: ['TypeScript', 'JavaScript', 'SCSS', 'Docker', 'Just'],
-      githubUrl: 'https://github.com/zanemyers/Flybox',
-      deprecated: true,
-    },
-  ];
+  const featured = projects[0];
+  const rest = projects.slice(1);
+  const total = String(projects.length).padStart(2, '0');
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-
-      <main className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-foreground mb-4">My Projects</h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              A collection of projects that showcase my skills in full-stack development, design,
-              and problem-solving. Each project represents a unique challenge and learning
-              experience.
-            </p>
+    <>
+      {/* Page head */}
+      <section
+        className="mx-auto max-w-7xl px-4 pt-14 pb-12 sm:px-6 md:pt-20 md:pb-16 lg:px-8"
+        aria-labelledby="projects-title"
+      >
+        <Reveal>
+          <Eyebrow>Selected work</Eyebrow>
+          <h1
+            id="projects-title"
+            className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight text-foreground text-balance"
+          >
+            My <span className="text-gradient">Projects</span>
+          </h1>
+          <p className="mt-5 max-w-3xl text-base md:text-lg text-muted-foreground leading-relaxed">
+            A collection of projects that showcase my skills in full-stack development, design, and
+            problem-solving. Each project represents a unique challenge and learning experience.
+          </p>
+          <div className="mt-8 flex items-center gap-4">
+            <span className="chip tabular-nums">
+              <span className="text-foreground">{total}</span>
+              projects
+            </span>
+            <span
+              aria-hidden="true"
+              className="h-px flex-1 bg-linear-to-r from-border to-transparent"
+            />
           </div>
+        </Reveal>
+      </section>
 
-          {/* Featured Project */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-foreground mb-8">Featured Project</h2>
-            <div className="bg-card rounded-lg shadow-lg overflow-hidden">
-              <div className="grid grid-cols-1 lg:grid-cols-2">
-                <div className="aspect-video lg:aspect-auto">
+      {/* Featured */}
+      <section
+        aria-label="Featured project"
+        className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8"
+      >
+        <Reveal>
+          <SectionHeading eyebrow="01 — Spotlight" title="Featured Project" />
+        </Reveal>
+
+        <Reveal delay={80} className="mt-10">
+          <div className="panel ring-gradient overflow-hidden rounded-2xl">
+            <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr]">
+              <div className="relative aspect-video lg:aspect-auto lg:min-h-112">
+                <img
+                  src={featured.image}
+                  alt={`Screenshot of ${featured.title}`}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover object-top-left dark:hidden"
+                />
+                {featured.imageDark && (
                   <img
-                    src={projects[0].image}
-                    alt={projects[0].title}
+                    src={featured.imageDark}
+                    alt={`Screenshot of ${featured.title}`}
                     loading="lazy"
-                    className="w-full h-full object-cover dark:hidden"
+                    className="absolute inset-0 h-full w-full object-cover object-top-left not-dark:hidden"
                   />
-                  {'imageDark' in projects[0] && (
-                    <img
-                      src={projects[0].imageDark}
-                      alt={projects[0].title}
-                      loading="lazy"
-                      className="w-full h-full object-cover hidden dark:block"
-                    />
-                  )}
+                )}
+                {/* Scrim: bottom-up on mobile, left-to-right into the copy on desktop. */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-linear-to-t from-card/85 via-card/15 to-transparent lg:bg-linear-to-r lg:from-transparent lg:via-card/10 lg:to-card/60"
+                />
+              </div>
+
+              <div className="relative flex flex-col justify-center gap-6 p-6 sm:p-10 lg:p-12">
+                <div className="flex items-center gap-3">
+                  <Tag tone="accent" className="uppercase tracking-[0.18em]">
+                    Featured
+                  </Tag>
+                  <span
+                    aria-hidden="true"
+                    className="h-px flex-1 bg-linear-to-r from-accent/40 to-transparent"
+                  />
+                  <span className="font-mono text-xs tabular-nums text-muted-foreground">
+                    01 / {total}
+                  </span>
                 </div>
-                <div className="p-8 lg:p-12 flex flex-col justify-center">
-                  <h3 className="text-3xl font-bold text-card-foreground mb-4">
-                    {projects[0].title}
+
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-semibold text-card-foreground text-balance">
+                    {featured.title}
                   </h3>
-                  <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
-                    {projects[0].description}
+                  <p className="mt-4 text-base md:text-lg text-muted-foreground leading-relaxed">
+                    {featured.description}
                   </p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {projects[0].technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-sm rounded-full"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex space-x-4">
-                    <a
-                      href={projects[0].githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {featured.technologies.map((tech) => (
+                    <Tag key={tech} tone="accent">
+                      {tech}
+                    </Tag>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  {featured.githubUrl && (
+                    <Button
+                      href={featured.githubUrl}
+                      external
+                      icon={<FiGithub size={16} />}
+                      aria-label={`View Code for ${featured.title}`}
                     >
                       View Code
-                    </a>
-                    <a
-                      href={projects[0].liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="border border-border text-foreground px-6 py-3 rounded-lg border-gray-300 hover:bg-gray-300 dark:hover:text-black transition-colors"
+                    </Button>
+                  )}
+                  {featured.liveUrl && (
+                    <Button
+                      href={featured.liveUrl}
+                      external
+                      variant="outline"
+                      icon={<FiExternalLink size={16} />}
+                      aria-label={`Live Demo for ${featured.title}`}
                     >
                       Live Demo
-                    </a>
-                  </div>
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
-          </section>
+          </div>
+        </Reveal>
+      </section>
 
-          {/* All Projects Grid */}
-          <section>
-            <h2 className="text-2xl font-bold text-foreground mb-8">All Projects</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.slice(1).map((project) => (
-                <ProjectCard
-                  key={project.title}
-                  title={project.title}
-                  description={project.description}
-                  image={project.image}
-                  technologies={project.technologies}
-                  githubUrl={project.githubUrl}
-                  liveUrl={project.liveUrl}
-                  deprecated={'deprecated' in project ? project.deprecated : undefined}
-                />
-              ))}
-            </div>
-          </section>
+      <div aria-hidden="true" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="hairline" />
+      </div>
 
-          {/* Call to Action */}
-          <section className="mt-16 text-center">
-            <div className="bg-blue-600 text-white rounded-lg p-8">
-              <h2 className="text-2xl font-bold mb-4">Interested in Working Together?</h2>
-              <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-                I'm always open to discussing new opportunities and interesting projects. Let's
-                connect and see how we can create something amazing together.
-              </p>
-              <a
-                href="mailto:zane15myers@gmail.com"
-                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
-              >
-                Get In Touch
-              </a>
-            </div>
-          </section>
+      {/* All projects */}
+      <section
+        aria-label="All projects"
+        className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8"
+      >
+        <Reveal>
+          <SectionHeading eyebrow="02 — Index" title="All Projects" />
+        </Reveal>
+
+        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          {rest.map((project, index) => (
+            <Reveal key={project.title} className="h-full" delay={index * 80}>
+              <ProjectCard {...project} />
+            </Reveal>
+          ))}
         </div>
-      </main>
+      </section>
 
-      <Footer />
-    </div>
+      {/* Call to action */}
+      <section
+        aria-label="Contact"
+        className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 md:pb-28 lg:px-8"
+      >
+        <Reveal>
+          <div className="panel ring-gradient overflow-hidden rounded-2xl px-6 py-14 text-center sm:px-12">
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 grid-lines" />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-40 left-1/2 h-56 w-152 max-w-[120%] -translate-x-1/2 rounded-full bg-accent/12 blur-3xl"
+            />
+            <div className="relative">
+              <SectionHeading
+                align="center"
+                eyebrow="03 — Contact"
+                title="Interested in Working Together?"
+                description="I'm always open to discussing new opportunities and interesting projects. Let's connect and see how we can create something amazing together."
+              />
+              <div className="mt-9 flex justify-center">
+                <Button href={mailto} size="lg" iconAfter={<FiArrowUpRight size={16} />}>
+                  Get In Touch
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+    </>
   );
 }

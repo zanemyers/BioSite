@@ -1,7 +1,18 @@
-import { FiBriefcase, FiDownload, FiMapPin } from 'react-icons/fi';
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
-import SkillCard from '../../components/SkillsCard';
+import {
+  FiArrowRight,
+  FiBriefcase,
+  FiChevronDown,
+  FiDownload,
+  FiMail,
+  FiMapPin,
+} from 'react-icons/fi';
+import SkillsCard from '../../components/SkillsCard';
+import UpdateCard from '../../components/UpdateCard';
+import Button from '../../components/ui/Button';
+import Reveal from '../../components/ui/Reveal';
+import SectionHeading from '../../components/ui/SectionHeading';
+import { mailto, site } from '../../siteConfig';
+import { sortedUpdates } from '../Updates/updateEntries';
 import aboutMePicture from './imgs/about_me.jpg';
 import profilePicture from './imgs/profile.jpg';
 
@@ -25,71 +36,123 @@ const otherTools = [
   { name: 'Docker', level: 60 },
 ];
 
+const [latestUpdate] = sortedUpdates;
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <>
+      {/* Hero */}
+      <section
+        aria-labelledby="hero-title"
+        className="relative isolate flex items-center overflow-hidden pb-20 pt-14 md:min-h-[80vh] md:pb-24 md:pt-16"
+      >
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+          <div className="grid-lines absolute inset-x-0 top-0 h-152" />
+          <div className="absolute -top-28 left-1/2 h-80 w-184 -translate-x-1/2 rounded-full bg-accent/15 blur-[100px]" />
+        </div>
 
-      <main>
-        {/* Hero Section */}
-        <section className="bg-blue-50 dark:bg-blue-950 py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
-                <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
-                  Hi, I'm <span className="text-blue-600">Zane Myers</span>
-                </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed">
-                  A developer and problem solver who enjoys learning new technologies and building
-                  things that are genuinely useful.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <a
-                    href="/zm-resume.pdf"
-                    download
-                    className="mt-4 md:mt-0 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-                  >
-                    <FiDownload size={18} />
-                    <span>Download Resume</span>
-                  </a>
-                  <a
-                    href="mailto:zane15myers@gmail.com"
-                    className="border border-border text-foreground px-6 py-3 rounded-lg bg-gray-300 dark:bg-gray-500 hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors"
-                  >
-                    Get In Touch
-                  </a>
-                </div>
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
+            <Reveal className="lg:col-span-7">
+              <p className="eyebrow flex flex-wrap items-center gap-2">
+                {site.role} — {site.location}
+                <span aria-hidden="true" className="animate-caret h-3 w-0.5 bg-accent" />
+              </p>
+
+              <h1
+                id="hero-title"
+                className="mt-6 text-5xl font-semibold tracking-tight text-foreground text-balance md:text-7xl"
+              >
+                Hi, I'm <span className="text-gradient">Zane Myers</span>
+              </h1>
+
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty md:text-xl">
+                A developer and problem solver who enjoys learning new technologies and building
+                things that are genuinely useful.
+              </p>
+
+              <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <Button
+                  href={site.resumePath}
+                  download
+                  variant="primary"
+                  size="lg"
+                  icon={<FiDownload size={16} />}
+                >
+                  Download Resume
+                </Button>
+                <Button href={mailto} variant="outline" size="lg" icon={<FiMail size={16} />}>
+                  Get In Touch
+                </Button>
               </div>
+            </Reveal>
 
-              <div className="flex justify-center lg:justify-end">
-                <div className="w-80 h-80 rounded-full overflow-hidden shadow-2xl">
-                  <img
-                    src={profilePicture}
-                    alt="Profile"
-                    loading="eager"
-                    className="w-full h-full object-cover"
+            <Reveal delay={80} className="lg:col-span-5">
+              <div className="relative mx-auto w-full max-w-sm">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-8 rounded-[3rem] bg-linear-to-br from-accent/25 via-cyan/20 to-violet/20 blur-3xl"
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-5 rounded-[2.5rem] border border-border/70"
+                />
+                <div
+                  aria-hidden="true"
+                  className="animate-float pointer-events-none absolute -right-4 -top-4 h-16 w-16 rounded-full bg-linear-to-br from-accent/70 to-cyan/40 opacity-70 blur-md"
+                />
+
+                <div className="ring-gradient relative rounded-3xl border border-border bg-card/60 p-2.5 shadow-xl backdrop-blur-md">
+                  <div className="overflow-hidden rounded-[1.35rem]">
+                    <img
+                      src={profilePicture}
+                      alt="Zane Myers"
+                      loading="eager"
+                      className="aspect-square w-full object-cover"
+                    />
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -left-1.5 -top-1.5 h-6 w-6 rounded-tl-xl border-l border-t border-accent/60"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -bottom-1.5 -right-1.5 h-6 w-6 rounded-br-xl border-b border-r border-cyan/60"
                   />
                 </div>
               </div>
-            </div>
+            </Reveal>
           </div>
-        </section>
+        </div>
 
-        {/* About Section */}
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-8 hidden flex-col items-center gap-2 lg:flex"
+        >
+          <span className="micro-label">Scroll</span>
+          <span className="h-8 w-px bg-linear-to-b from-border-strong to-transparent" />
+          <FiChevronDown size={14} aria-hidden="true" className="animate-float text-accent" />
+        </div>
+      </section>
+
+      {/* About */}
+      <section aria-label="About me" className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <Reveal className="order-last lg:order-first">
+              <div className="ring-gradient overflow-hidden rounded-2xl border border-border bg-card/50 p-2 shadow-lg backdrop-blur-md">
                 <img
                   src={aboutMePicture}
                   alt="My Family"
                   loading="lazy"
-                  className="rounded-lg shadow-lg"
+                  className="w-full rounded-xl object-cover"
                 />
               </div>
+            </Reveal>
 
-              <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-foreground">About Me</h2>
+            <Reveal delay={80}>
+              <SectionHeading eyebrow="01 — About" title="About Me" />
+              <div className="mt-6 max-w-2xl space-y-5">
                 <p className="text-muted-foreground leading-relaxed">
                   I’m a software developer who enjoys turning messy problems into clean, reliable
                   solutions. My work focuses on building data-driven tools and web applications,
@@ -102,43 +165,111 @@ export default function Home() {
                   challenge, and like pushing myself to build things that are both practical and
                   well-crafted.
                 </p>
+              </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                  <div className="flex items-center space-x-3">
-                    <FiMapPin size={20} className="text-blue-600" />
-                    <span className="text-foreground">St. George, Kansas</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <FiBriefcase size={20} className="text-blue-600" />
-                    <span className="text-foreground">Application Developer at Aprio</span>
-                  </div>
-                </div>
+              <div className="mt-8 flex flex-wrap items-center gap-2.5">
+                <span className="chip">
+                  <FiMapPin size={13} aria-hidden="true" className="text-accent" />
+                  {site.location}
+                </span>
+                <span className="chip">
+                  <FiBriefcase size={13} aria-hidden="true" className="text-accent" />
+                  {site.role} at {site.employer}
+                </span>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      <div aria-hidden="true" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="hairline" />
+      </div>
+
+      {/* Skills */}
+      <section aria-label="Skills and expertise" className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <SectionHeading
+              align="center"
+              eyebrow="02 — Skills"
+              title="Skills & Expertise"
+              description="A diverse set of skills accumulated through years of experience and continuous learning."
+              className="mx-auto max-w-2xl"
+            />
+          </Reveal>
+
+          <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
+            <Reveal className="h-full">
+              <SkillsCard name="Frontend Development" skills={frontendSkills} color="accent" />
+            </Reveal>
+            <Reveal delay={80} className="h-full">
+              <SkillsCard name="Backend Development" skills={backendSkills} color="cyan" />
+            </Reveal>
+            <Reveal delay={160} className="h-full">
+              <SkillsCard name="Design & Tools" skills={otherTools} color="violet" />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      <div aria-hidden="true" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="hairline" />
+      </div>
+
+      {/* Latest update */}
+      {latestUpdate && (
+        <section aria-label="Latest update" className="relative py-20 md:py-28">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <Reveal>
+              <SectionHeading eyebrow="03 — Latest" title="Latest Update" />
+            </Reveal>
+
+            <Reveal delay={80} className="mt-10">
+              <UpdateCard {...latestUpdate} clamp />
+
+              <div className="mt-7">
+                <Button
+                  to="/updates"
+                  variant="outline"
+                  size="md"
+                  iconAfter={<FiArrowRight size={16} />}
+                >
+                  Read all updates
+                </Button>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
+      {/* Closing — the buttons carry it; no prose. */}
+      <section aria-label="Keep exploring" className="relative pb-20 md:pb-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <div className="panel ring-gradient isolate overflow-hidden rounded-2xl px-6 py-14 text-center md:px-14 md:py-20">
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+                <div className="grid-lines absolute inset-0" />
+                <div className="absolute -bottom-24 left-1/2 h-64 w-136 -translate-x-1/2 rounded-full bg-accent/15 blur-[90px]" />
+              </div>
+
+              <SectionHeading align="center" eyebrow="04 — Elsewhere" title="Take a look around" />
+
+              <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+                <Button to="/projects" size="lg" iconAfter={<FiArrowRight size={16} />}>
+                  View Projects
+                </Button>
+                <Button to="/resume" variant="outline" size="lg">
+                  Read Resume
+                </Button>
+                <Button href={mailto} variant="ghost" size="lg" icon={<FiMail size={16} />}>
+                  Email me
+                </Button>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* Skills Section */}
-        <section className="py-20 bg-secondary">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">Skills & Expertise</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                A diverse set of skills accumulated through years of experience and continuous
-                learning.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <SkillCard name="Frontend Development" skills={frontendSkills} color="bg-blue-600" />
-              <SkillCard name="Backend Development" skills={backendSkills} color="bg-green-600" />
-              <SkillCard name="Design & Tools" skills={otherTools} color="bg-purple-600" />
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <Footer />
-    </div>
+          </Reveal>
+        </div>
+      </section>
+    </>
   );
 }

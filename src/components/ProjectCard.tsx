@@ -1,4 +1,5 @@
 import { FiExternalLink, FiGithub } from 'react-icons/fi';
+import Tag from './ui/Tag';
 
 interface Props {
   title: string;
@@ -10,69 +11,88 @@ interface Props {
   deprecated?: boolean;
 }
 
-const ProjectCard = (props: Props) => {
+export default function ProjectCard({
+  title,
+  description,
+  image,
+  technologies,
+  githubUrl,
+  liveUrl,
+  deprecated,
+}: Props) {
   return (
-    <div className="bg-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="aspect-video overflow-hidden">
+    <article className="panel panel-interactive group flex h-full flex-col overflow-hidden">
+      <div className="relative aspect-video overflow-hidden">
         <img
-          src={props.image}
-          alt={props.title}
+          src={image}
+          alt={`Screenshot of ${title}`}
           loading="lazy"
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+        />
+        {/* Scrim melts the screenshot into the card body instead of butting against it. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-linear-to-t from-card/80 via-card/10 to-transparent"
         />
       </div>
 
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-2">
-          <h3 className="text-xl font-semibold text-card-foreground">{props.title}</h3>
-          {props.deprecated && (
-            <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 text-xs rounded-full font-medium">
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-xl font-semibold text-card-foreground text-balance">{title}</h3>
+          {deprecated && (
+            <Tag tone="warn" className="mt-0.5 shrink-0">
               Deprecated
-            </span>
+            </Tag>
           )}
         </div>
-        <p className="text-muted-foreground mb-4 line-clamp-3">{props.description}</p>
 
-        <div className="flex flex-wrap gap-2 mb-4">
-          {props.technologies.map((tech) => (
-            <span
-              key={tech}
-              className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-sm rounded-full"
-            >
+        <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+          {description}
+        </p>
+
+        <div className="mt-5 mb-6 flex flex-wrap gap-2">
+          {technologies.map((tech) => (
+            <Tag key={tech} tone="accent">
               {tech}
-            </span>
+            </Tag>
           ))}
         </div>
 
-        <div className="flex space-x-4">
-          {props.githubUrl && (
+        <div className="mt-auto flex items-center gap-5 border-t border-border/70 pt-5">
+          {githubUrl && (
             <a
-              href={props.githubUrl}
+              href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-muted-foreground hover:text-card-foreground transition-colors"
-              aria-label={`View ${props.title} on GitHub`}
+              className="group/link inline-flex items-center gap-2 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+              aria-label={`View ${title} on GitHub`}
             >
-              <FiGithub size={18} />
-              <span className="text-sm">Code</span>
+              <FiGithub
+                size={16}
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover/link:-translate-y-0.5"
+              />
+              Code
             </a>
           )}
-          {props.liveUrl && (
+          {liveUrl && (
             <a
-              href={props.liveUrl}
+              href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors"
-              aria-label={`View ${props.title} live demo`}
+              className="group/link inline-flex items-center gap-2 font-mono text-xs text-accent decoration-accent/40 underline-offset-4 hover:underline"
+              aria-label={`View ${title} live demo`}
             >
-              <FiExternalLink size={18} />
-              <span className="text-sm">Live Demo</span>
+              <FiExternalLink
+                size={16}
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+              />
+              Live Demo
             </a>
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
-};
-
-export default ProjectCard;
+}
