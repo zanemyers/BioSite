@@ -1,14 +1,21 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /resume/print
 
 User-agent: Bingbot
 Allow: /
+Disallow: /resume/print
 
 User-agent: Twitterbot
 Allow: /
+Disallow: /resume/print
 
 User-agent: facebookexternalhit
 Allow: /
+Disallow: /resume/print
 
 User-agent: *
 Allow: /
+Disallow: /resume/print
+
+Sitemap: https://zm1.org/sitemap.xml
