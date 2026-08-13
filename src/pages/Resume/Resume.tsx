@@ -8,47 +8,15 @@ import {
   FiPhone,
   FiPlus,
 } from 'react-icons/fi';
-import JobEntry, { type JobProps } from '../../components/JobEntry';
+import JobEntry from '../../components/JobEntry';
 import Button from '../../components/ui/Button';
 import Reveal from '../../components/ui/Reveal';
 import SectionHeading, { Eyebrow } from '../../components/ui/SectionHeading';
-import Tag, { type TagTone } from '../../components/ui/Tag';
+import Tag from '../../components/ui/Tag';
 import { TimelineRail } from '../../components/ui/Timeline';
 import { mailto, site } from '../../siteConfig';
-import { jobs, volunteering } from './jobEntries';
-
-const frontendSkills = [
-  'React',
-  'Vue.js',
-  'TypeScript',
-  'Javascript',
-  'HTML',
-  'CSS',
-  'Bootstrap 5',
-];
-const backendSkills = [
-  'Python',
-  'Django',
-  'Node.js',
-  'Express.js',
-  'Rest APIs',
-  'PostgreSQL',
-  'MySQL',
-];
-const otherSkills = ['Git', 'Docker', 'Playwright', 'Just'];
-const interests = [
-  'Web Development',
-  'App Development (IOS)',
-  'AI Integrations',
-  'Mentorship & Personal Development',
-  'International Missions & Travel',
-];
-
-const skillGroups: { title: string; tone: TagTone; skills: string[] }[] = [
-  { title: 'Frontend', tone: 'accent', skills: frontendSkills },
-  { title: 'Backend', tone: 'cyan', skills: backendSkills },
-  { title: 'Tools & Other', tone: 'violet', skills: otherSkills },
-];
+import { volunteering } from './jobEntries';
+import { currentJobs, education, interests, olderJobs, skillGroups, summary } from './resumeData';
 
 interface ContactItem {
   label: string;
@@ -70,20 +38,6 @@ const contact: ContactItem[] = [
     external: true,
   },
 ];
-
-/** Same shape as a job so the degree can ride the shared timeline. Purple = K-State. */
-const education: JobProps = {
-  color: 'purple',
-  title: 'Bachelor of Science in Computer Science',
-  company: 'Kansas State University',
-  from: 'Aug 2018',
-  to: 'Dec 2022',
-  location: 'Manhattan, Kansas',
-  experiences: [],
-};
-
-const currentJobs = jobs.filter((job) => !job.olderExperience);
-const olderJobs = jobs.filter((job) => job.olderExperience);
 
 const contactShell =
   'group flex items-center gap-3 rounded-xl border border-border bg-muted/40 px-4 py-3';
@@ -178,10 +132,7 @@ export default function Resume() {
           >
             <SectionHeading eyebrow="01 — Summary" title="Professional Summary" />
             <p className="mt-6 border-l border-accent/40 pl-5 text-base leading-relaxed text-muted-foreground md:text-lg">
-              Software developer with 2+ years of full-stack experience building web applications
-              using Python, Django, Vue.js, React, and Node.js. Experienced in automating workflows,
-              integrating Al tools, and maintaining CI/CD pipelines. Proven collaborator with a
-              passion for clean, maintainable code, mentorship, and user-focused design.
+              {summary}
             </p>
           </section>
         </Reveal>
