@@ -7,14 +7,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 bun run dev        # Start development server (Vite HMR)
 bun run build      # Type-check (tsc -b) then bundle for production
-bun run typecheck  # Type-check only (tsc -b)
+bun run typecheck  # Type-check only (tsc -b) — covers src, scripts, and tests
+bun run test       # Fast checks: résumé PDF invariants + colour-token contrast
+bun run test:browser # Route smoke test (needs Chromium; not run in CI)
+bun run test:all   # Everything
+bun run resume:pdf # Regenerate public/zm-resume.pdf from the résumé data
+bun run resume:check # Fail if that PDF is stale relative to its source data
 bun run lint       # Lint with Biome
 bun run format     # Format with Biome
 bun run check      # Biome check + auto-fix
 bun run preview    # Preview production build locally
 ```
 
-Package manager is **Bun** (`bun.lock`). Linting/formatting is **Biome** (`biome.json`). No test runner is configured.
+Package manager is **Bun** (`bun.lock`). Linting/formatting is **Biome** (`biome.json`). Tests use Bun's built-in runner — no separate test framework.
+
+The browser tests and `resume:pdf` need Chromium, which Playwright does not install automatically: run `bunx playwright install chromium` once per machine. CI never needs it, because `bun run test` covers only the browser-free suites.
 
 ## Architecture
 
@@ -43,6 +50,18 @@ The light-mode `--accent` and `--cyan` values are deliberately held dark (50% / 
 Tokens are pruned to what's actually consumed. The `primary` / `secondary` / `accent-soft` color tokens were removed, so utilities named after them no longer resolve — add the token back if you need one. Gradients use the Tailwind v4 names (`bg-linear-to-*`), not the deprecated v3 alias.
 
 Note `@source not "../../**/*.md"` at the top of `styles.css`: Tailwind v4 auto-scans every project file for class names, and prose in this file was emitting real rules into the bundle. Keep that exclusion if you write class names in Markdown.
+
+**Résumé PDF** (`public/zm-resume.pdf`): generated, not hand-made. `src/pages/Resume/ResumePrint.tsx` is a Letter-sized print sheet that `scripts/generate-resume-pdf.ts` renders in headless Chromium via `page.pdf()`. Résumé content lives in `src/pages/Resume/resumeData.ts` + `jobEntries.ts`, so the page and the PDF can't disagree.
+
+- The print route is registered **only when `import.meta.env.DEV`**, so it's absent from production builds (the module tree-shakes out). That's why the generator renders against the dev server rather than a preview of `dist`.
+- The sheet clips overflow so nothing can spill onto page two, which means an overflow would silently *lose* content. The generator measures both axes and fails with the exact pixel overrun instead. It prints the fill percentage of each column — keep the main column under ~90% so bullets can be added later.
+- Only current roles appear; `olderExperience` entries are excluded by design.
+- After editing résumé data, run `bun run resume:pdf` and commit both the PDF and `scripts/zm-resume.hash`. `bun run resume:check` compares that hash against the current sources and fails CI if you forget. The hash covers typography too — `styles.css` and `index.html` — since a font change alters the render without touching any résumé text.
+- `tests/resume-pdf.test.ts` guards the properties that matter: one Letter page, real font resources, and that the file hasn't regressed to an image-only export (the version this replaced was a single raster with zero extractable text, invisible to ATS parsers).
+
+**Tests**: there are deliberately few, and none on component markup — the content is static and type-checked, so snapshots would churn on every design tweak and catch little. What exists covers things nothing else can: the PDF invariants above, `tests/contrast.test.ts` (asserts the token pairings clear WCAG AA in both themes, since the light-mode accent/cyan values are deliberately dark and easy to "fix" by lightening), and `tests/browser/routes.test.ts` (every route renders with no console errors and exactly one `h1`).
+
+Tests live in `tests/`, owned by `tsconfig.node.json` rather than the app project. Anything needing a browser goes in `tests/browser/` so the default `bun run test` — and therefore CI — needs no Chromium download; `bun run test` globs `tests/*.test.ts`, so a new fast test is picked up without editing package.json.
 
 **Components vs Pages**: Shared primitives live in `src/components/ui/` — `Reveal` (scroll-reveal wrapper; put grid layout classes like `h-full` on it, since it becomes the grid child), `SectionHeading` (eyebrow + `h2` + description) which also exports `Eyebrow` for page heads that render their own `h1`, `Tag` (pill; also exports `toneText(tone)` for text-only tone colors), `Button` (a `Link` for `to`, an anchor for `href` — exactly one is required), `Timeline` (`TimelineRail` + `TimelineNode`, shared by the Resume experience list and the Updates feed), and `Clause` (+ `Item`, shared by the Terms and Privacy pages). Reuse these rather than re-implementing them. Other reusable display components live in `src/components/`; route-specific page components live in `src/pages/` and own local UI state (e.g. mobile menu open/closed, category filter selection).
 

@@ -36,3 +36,9 @@ jobs:
 
       - name: TypeScript
         run: bun run typecheck
+
+      - name: Résumé PDF is current
+        run: bun run resume:check
+
+      - name: Tests
+        run: bun run test

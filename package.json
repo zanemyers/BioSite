@@ -6,11 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "resume:pdf": "bun scripts/generate-resume-pdf.ts",
+    "resume:check": "bun scripts/check-resume-pdf.ts",
     "typecheck": "tsc -b",
+    "test": "bun test tests/*.test.ts",
+    "test:all": "bun test",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check --write .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:browser": "bun test tests/browser"
   },
   "dependencies": {
     "react": "^19.2.8",
@@ -21,9 +26,12 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.7",
     "@tailwindcss/vite": "^4.3.3",
+    "@types/bun": "^1.3.14",
+    "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.0.5",
+    "playwright": "^1.62.1",
     "tailwindcss": "^4.2.4",
     "typescript": "~7.0.2",
     "vite": "^8.2.1"
