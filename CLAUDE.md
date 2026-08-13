@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 bun run dev        # Start development server (Vite HMR)
 bun run build      # Type-check (tsc -b) then bundle for production
+bun run typecheck  # Type-check only (tsc -b)
 bun run lint       # Lint with Biome
 bun run format     # Format with Biome
 bun run check      # Biome check + auto-fix
@@ -19,14 +20,30 @@ Package manager is **Bun** (`bun.lock`). Linting/formatting is **Biome** (`biome
 
 Personal portfolio/biography site built with **React 19 + TypeScript + Vite**.
 
-**Routing** (`src/App.tsx`): React Router v6 with `BrowserRouter`. Routes: `/` (Home), `/resume`, `/projects`, `/updates`, `/terms-of-service`, `/privacy-policy`, `*` (NotFound).
+**Routing** (`src/App.tsx`): React Router v7 with `BrowserRouter`. Every route is nested inside a single layout route rendering `src/components/Layout.tsx`. Routes: `/` (Home), `/resume`, `/projects`, `/updates`, `/terms-of-service`, `/privacy-policy`, `*` (NotFound).
 
-**Data**: All content is static TypeScript data files (no backend/API). Jobs are in `jobEntries.ts`, updates in `updateEntries.ts`. Projects are defined inline in `src/pages/Projects/Projects.tsx` as a `projects` array — the first item is rendered as the "Featured Project" in a larger hero layout; the rest appear in the grid below. To add new content, edit these files.
+**Layout** (`src/components/Layout.tsx`): owns all shared chrome — skip link, ambient `Backdrop`, `ScrollProgress`, `Header`, `<main id="main">` with the route `Outlet`, and `Footer` — plus scroll reset on navigation. **Pages must not render `Header`, `Footer`, or `<main>`, and must not wrap themselves in `min-h-screen`/`bg-background`**; they return their sections directly. The nav list is defined once as the exported `navigation` array in `Header.tsx` and reused by `Footer.tsx`.
 
-**ProjectCard**: Accepts an optional `deprecated` boolean that renders a yellow "Deprecated" badge on the card. The featured project hero also supports an optional `imageDark` property to swap in a dark-mode variant image (`dark:block` / `dark:hidden` CSS classes handle the toggle).
+**Data**: All content is static TypeScript data files (no backend/API). Jobs are in `jobEntries.ts` (typed `JobRecord` — `JobProps` plus the `olderExperience` flag the Resume page filters on), updates in `updateEntries.ts` (typed `UpdateEntry`, exported newest-first as `sortedUpdates`). Projects are defined inline in `src/pages/Projects/Projects.tsx` as a `projects` array — the first item is rendered as the "Featured Project" in a larger hero layout; the rest appear in the grid below. To add new content, edit these files.
 
-**Theme system**: Dark/light mode uses a CSS custom property design token system defined in `src/styles/styles.css` (HSL variables like `--background`, `--foreground`, etc.). The `dark` class on the `<html>` element switches palettes. Theme is persisted to `localStorage` under the `theme` key and initialized early in `src/index.tsx` to prevent flash of unstyled content. Radix UI Themes wraps the app with `appearance="inherit"`.
+Recurring details — email, phone, résumé path, social URLs, role, location — live in **`src/siteConfig.ts`**. Import `site` / `mailto` rather than hardcoding them, so an address change is one edit.
 
-**Styling**: Tailwind CSS v4 via the `@tailwindcss/vite` plugin (no PostCSS config). Theme tokens and `@custom-variant dark` live in `src/styles/styles.css`. Use semantic color tokens (`text-foreground`, `bg-card`, `text-muted-foreground`) rather than raw colors. Three font families are configured: Inter (sans), Lora (serif), Space Mono (mono).
+**Update categories** are the keys of `categoryTones` in `UpdateCard.tsx`; `UpdateCategory` is derived from them, so a typo in `updateEntries.ts` is a type error and the Updates filter row is generated from the same list.
 
-**Components vs Pages**: Reusable display components live in `src/components/`. Route-specific page components live in `src/pages/`. Pages compose components and own local UI state (e.g., mobile menu open/closed, category filter selection).
+**ProjectCard**: Accepts an optional `deprecated` boolean that renders a "Deprecated" badge on the card. The `projects` array is typed by an explicit `Project` interface, so `imageDark`, `githubUrl`, `liveUrl`, and `deprecated` are plain optional properties. The featured project hero swaps in `imageDark` for dark mode (`dark:hidden` / `hidden dark:block` handle the toggle).
+
+**Theme system**: Dark/light mode uses a CSS custom property design token system defined in `src/styles/styles.css` (HSL channel triplets like `--background`, `--foreground`, `--accent`, so every token composes with `/ alpha`). The `dark` class on the `<html>` element switches palettes. Theme is persisted to `localStorage` under the `theme` key and applied by an inline script in `index.html` before first paint to prevent a flash of the wrong theme.
+
+The light-mode `--accent` and `--cyan` values are deliberately held dark (50% / 28% lightness) so accent-on-`accent/10` pills and white-on-gradient buttons clear WCAG AA. Don't lighten them without re-checking contrast.
+
+**Styling**: Tailwind CSS v4 via the `@tailwindcss/vite` plugin (no PostCSS config). Theme tokens and `@custom-variant dark` live in `src/styles/styles.css`. Use semantic color tokens (`text-foreground`, `bg-card`, `text-muted-foreground`, `text-accent`) rather than raw colors. Three font families load from Google Fonts in `index.html`: Inter (`font-sans`, body), Space Grotesk (`font-display`, headings — applied automatically to `h1`/`h2`/`h3`), JetBrains Mono (`font-mono`, labels/dates/tags).
+
+**Design system classes** (`src/styles/styles.css`, `@layer components` / `@layer utilities`): `.panel` is the standard frosted card surface (use it instead of hand-rolling `bg-card shadow-lg rounded-lg`), with `.panel-interactive` for hover lift + glow. Also `.eyebrow` (mono kicker), `.chip` (pill geometry — shared with `Tag`, which layers a tone's colors on top; use `.chip` bare only for the plain muted pill and a `<Tag>` for anything with a tone), `.hairline` (full-bleed section rule), `.micro-label` (small mono metadata label), `.ring-gradient` (1px gradient outline), `.text-gradient`, `.grid-lines` / `.grid-lines-fine`, `.aurora-blob`, and the `.animate-float` / `.animate-pulse-ring` / `.animate-caret` ambient motions. All motion is disabled under `prefers-reduced-motion`, which also forces `[data-reveal]` elements visible; a `@media print` rule does the same so nothing prints blank.
+
+Tokens are pruned to what's actually consumed. The `primary` / `secondary` / `accent-soft` color tokens were removed, so utilities named after them no longer resolve — add the token back if you need one. Gradients use the Tailwind v4 names (`bg-linear-to-*`), not the deprecated v3 alias.
+
+Note `@source not "../../**/*.md"` at the top of `styles.css`: Tailwind v4 auto-scans every project file for class names, and prose in this file was emitting real rules into the bundle. Keep that exclusion if you write class names in Markdown.
+
+**Components vs Pages**: Shared primitives live in `src/components/ui/` — `Reveal` (scroll-reveal wrapper; put grid layout classes like `h-full` on it, since it becomes the grid child), `SectionHeading` (eyebrow + `h2` + description) which also exports `Eyebrow` for page heads that render their own `h1`, `Tag` (pill; also exports `toneText(tone)` for text-only tone colors), `Button` (a `Link` for `to`, an anchor for `href` — exactly one is required), `Timeline` (`TimelineRail` + `TimelineNode`, shared by the Resume experience list and the Updates feed), and `Clause` (+ `Item`, shared by the Terms and Privacy pages). Reuse these rather than re-implementing them. Other reusable display components live in `src/components/`; route-specific page components live in `src/pages/` and own local UI state (e.g. mobile menu open/closed, category filter selection).
+
+**Conventions**: section eyebrows are numbered (`01 — About`) while page-head eyebrows are not; content page titles are `text-4xl md:text-6xl` (the Home hero and the 404 are deliberately larger); major sections use `py-20 md:py-28` and page heads `pt-14 md:pt-20`; Home and Projects are `max-w-7xl`, Resume/Updates/Terms/Privacy/404 are `max-w-4xl`; `Reveal` staggers step by 80ms; `Button` icons are `size={16}`; decorative layers carry `aria-hidden="true"`, plus `pointer-events-none` whenever they overlay content.
