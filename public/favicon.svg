@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ZM">
+  <title>Zane Myers</title>
+  <defs>
+    <!-- Mirrors .text-gradient: linear-gradient(100deg, accent, cyan 55%, violet) -->
+    <linearGradient id="mark" x1="0" y1="0.05" x2="1" y2="0.22">
+      <stop offset="0" stop-color="#57a0fa"/>
+      <stop offset="0.55" stop-color="#3be1f7"/>
+      <stop offset="1" stop-color="#a581f8"/>
+    </linearGradient>
+    <!-- Mirrors .ring-gradient on the nav tile -->
+    <linearGradient id="ring" x1="0.047" y1="-0.040" x2="0.953" y2="1.040">
+      <stop offset="0" stop-color="#57a0fa" stop-opacity="0.9"/>
+      <stop offset="0.45" stop-color="#3be1f7" stop-opacity="0.5"/>
+      <stop offset="0.75" stop-color="#3be1f7" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="32" fill="#0e1320"/>
+  <circle cx="32" cy="32" r="31" fill="none" stroke="url(#ring)" stroke-width="1.6"/>
+  <path transform="translate(9.565 42.921) scale(0.031204 -0.031204)" fill="url(#mark)" d="M46 0V168L392 566V582H56V700H530V532L184 134V118H532V0ZM642 0V700H887L1008 90H1026L1147 700H1392V0H1264V603H1246L1126 0H908L788 603H770V0Z"/>
+</svg>
