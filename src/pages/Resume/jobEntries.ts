@@ -54,7 +54,7 @@ export const jobs: JobRecord[] = [
     company: 'Student Mobilization',
     from: 'June 2022',
     to: 'July 2022',
-    location: 'Manhattan, Kansas',
+    location: 'Cebu City, Philippines',
     olderExperience: true,
     experiences: [
       'Organized 5+ community events with 20–30 participants each as part of a collaborative team.',
