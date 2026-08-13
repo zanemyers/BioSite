@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound';
 import Privacy from './pages/Privacy';
 import Projects from './pages/Projects/Projects';
 import Resume from './pages/Resume/Resume';
+import ResumePrint from './pages/Resume/ResumePrint';
 import Terms from './pages/Terms';
 import Updates from './pages/Updates/Updates';
 
@@ -14,6 +15,14 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
+        {/*
+         * Dev only, and outside Layout: the print sheet carries no header, footer, or backdrop.
+         * `import.meta.env.DEV` is replaced with a literal at build time, so this branch and the
+         * ResumePrint module are both dropped from the production bundle. The PDF generator runs
+         * against the dev server for the same reason — see scripts/generate-resume-pdf.ts.
+         */}
+        {import.meta.env.DEV && <Route path="/resume/print" element={<ResumePrint />} />}
+
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/resume" element={<Resume />} />
