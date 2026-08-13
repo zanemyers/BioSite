@@ -1,6 +1,15 @@
 import React from 'react';
 import { FiMoon, FiSun } from 'react-icons/fi';
 
+/** Mirrors of `--background`; the theme is class-driven, so the meta can't use a media query. */
+const THEME_COLORS = { dark: '#070a13', light: '#fafbfd' };
+
+const syncThemeColor = (isDark: boolean) => {
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute('content', isDark ? THEME_COLORS.dark : THEME_COLORS.light);
+};
+
 const ThemeToggle: React.FC = () => {
   const [isDark, setIsDark] = React.useState<boolean>(() => {
     try {
@@ -19,9 +28,11 @@ const ThemeToggle: React.FC = () => {
         if (val === 'dark') {
           document.documentElement.classList.add('dark');
           setIsDark(true);
+          syncThemeColor(true);
         } else if (val === 'light') {
           document.documentElement.classList.remove('dark');
           setIsDark(false);
+          syncThemeColor(false);
         }
       }
     };
@@ -31,15 +42,11 @@ const ThemeToggle: React.FC = () => {
 
   const toggleTheme = () => {
     try {
-      if (document.documentElement.classList.contains('dark')) {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-        setIsDark(false);
-      } else {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-        setIsDark(true);
-      }
+      const nextIsDark = !document.documentElement.classList.contains('dark');
+      document.documentElement.classList.toggle('dark', nextIsDark);
+      localStorage.setItem('theme', nextIsDark ? 'dark' : 'light');
+      setIsDark(nextIsDark);
+      syncThemeColor(nextIsDark);
     } catch {
       // ignore
     }
@@ -49,11 +56,25 @@ const ThemeToggle: React.FC = () => {
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      title={isDark ? 'Light mode' : 'Dark mode'}
-      className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+      aria-label="Dark mode"
+      aria-pressed={isDark}
+      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      className="group relative grid h-11 w-11 place-items-center overflow-hidden rounded-lg border border-border bg-card/70 text-muted-foreground transition-all duration-300 hover:border-accent/50 hover:text-accent md:h-9 md:w-9"
     >
-      {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
+      <FiSun
+        aria-hidden="true"
+        size={16}
+        className={`absolute transition-all duration-500 ${
+          isDark ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'
+        }`}
+      />
+      <FiMoon
+        aria-hidden="true"
+        size={16}
+        className={`absolute transition-all duration-500 ${
+          isDark ? 'rotate-90 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100'
+        }`}
+      />
     </button>
   );
 };
