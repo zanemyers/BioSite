@@ -1,77 +1,130 @@
-import type React from 'react';
 import { FiCalendar } from 'react-icons/fi';
+import Tag, { type TagTone } from './ui/Tag';
 
-export interface UpdateCardProps {
+/**
+ * The categories an entry can be filed under, and the tone each renders in. Key order is the
+ * filter order on the Updates page.
+ */
+const categoryTones = {
+  professional: 'accent',
+  personal: 'green',
+  learning: 'orange',
+  travel: 'violet',
+} satisfies Record<string, TagTone>;
+
+export type UpdateCategory = keyof typeof categoryTones;
+
+/** Filter order on the Updates page. Cast because `Object.keys` always widens to `string[]`. */
+export const updateCategories = Object.keys(categoryTones) as UpdateCategory[];
+
+/** One entry in updateEntries.ts — content only, no presentation flags. */
+export interface UpdateEntry {
   title: string;
   content: string;
   date: Date;
-  category: string[];
+  category: UpdateCategory[];
   image?: string;
-  imagePosition?: 'top' | 'side';
+  /**
+   * How the photo fills its frame. `cover` (default) bleeds edge to edge in a 16:9 frame, which
+   * suits landscape shots. Use `contain` for portrait or otherwise tall photos — it shows the
+   * whole image, centered, rather than cropping the subject out of a wide frame.
+   */
+  imageFit?: 'cover' | 'contain';
 }
 
-const UpdateCard: React.FC<UpdateCardProps> = ({
+/** An entry plus the per-placement presentation choices the pages make. */
+type UpdateCardProps = UpdateEntry & {
+  /** Truncates the body to three lines — used by teaser placements like Home. */
+  clamp?: boolean;
+  /** Hides the in-card date at lg+, where the feed shows it on the timeline rail instead. */
+  dateInRail?: boolean;
+};
+
+const pad = (value: number) => String(value).padStart(2, '0');
+
+export default function UpdateCard({
   title,
   content,
   date,
   category,
   image,
-  imagePosition = 'top',
-}) => {
-  const categoryColors = {
-    personal: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-    professional: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-    travel: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-    learning: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
-    default: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
-  };
+  imageFit = 'cover',
+  clamp = false,
+  dateInRail = false,
+}: UpdateCardProps) {
+  // Built from local parts so the machine-readable date can't drift a day across time zones.
+  const isoDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  const formattedDate = date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+  });
 
   const body = (
-    <div className="p-6 flex-1">
-      <div className="flex items-center justify-between mb-3">
+    <div className="flex min-w-0 flex-1 flex-col p-6 md:p-7">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         <div className="flex flex-wrap gap-2">
-          {category.map((cat) => {
-            const catColor = categoryColors[cat] || categoryColors.default;
-            return (
-              <span key={cat} className={`px-3 py-1 rounded-full text-sm font-medium ${catColor}`}>
-                {cat}
-              </span>
-            );
-          })}
+          {category.map((cat) => (
+            <Tag key={cat} tone={categoryTones[cat]}>
+              {cat}
+            </Tag>
+          ))}
         </div>
-
-        <div className="flex items-center text-muted-foreground text-sm">
-          <FiCalendar size={16} className="mr-1" />
-          {date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
-        </div>
+        <span className={`chip ml-auto ${dateInRail ? 'lg:hidden' : ''}`}>
+          <FiCalendar size={12} aria-hidden="true" />
+          <time dateTime={isoDate}>{formattedDate}</time>
+        </span>
       </div>
 
-      <h3 className="text-xl font-semibold text-card-foreground mb-3">{title}</h3>
-      <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{content}</p>
+      <h3 className="mt-4 text-xl font-semibold text-card-foreground text-balance md:text-2xl">
+        {title}
+      </h3>
+      <p
+        className={`mt-3 max-w-prose text-muted-foreground leading-relaxed whitespace-pre-line ${
+          clamp ? 'line-clamp-3' : ''
+        }`}
+      >
+        {content}
+      </p>
     </div>
   );
 
-  if (image && imagePosition === 'side') {
-    return (
-      <article className="bg-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col md:flex-row">
-        {body}
-        <div className="md:w-2/5 md:flex-shrink-0 aspect-video md:aspect-auto overflow-hidden order-first md:order-last">
-          <img src={image} alt={title} loading="lazy" className="w-full h-full object-cover" />
-        </div>
-      </article>
+  /* Contained photos keep their own proportions, so nothing gets cropped and the hover zoom —
+     which would crop — is left off. Cover photos bleed edge to edge in a 16:9 frame. */
+  const picture =
+    imageFit === 'contain' ? (
+      /* Width-capped rather than height-capped, so the photo always fills its box at its own
+         proportions and is never letterboxed. Container queries — not viewport ones — drive the
+         padding and rounding, so the moment the card itself is narrower than the cap the photo
+         goes fully flush, exactly like the 16:9 covers above. */
+      <div className="border-b border-border @min-[28rem]:py-5">
+        <img
+          src={image}
+          alt={title}
+          loading="lazy"
+          className="mx-auto h-auto w-full max-w-md @min-[28rem]:rounded-xl"
+        />
+      </div>
+    ) : (
+      <div className="relative aspect-video overflow-hidden border-b border-border">
+        <img
+          src={image}
+          alt={title}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+        />
+        {/* Vignette settles the photo into the glass instead of ending on a hard edge. */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/25 to-transparent"
+        />
+      </div>
     );
-  }
 
   return (
-    <article className="bg-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
-      {image && (
-        <div className="aspect-video overflow-hidden">
-          <img src={image} alt={title} loading="lazy" className="w-full h-full object-cover" />
-        </div>
-      )}
+    <article className="panel panel-interactive group @container flex flex-col overflow-hidden">
+      {image && picture}
       {body}
     </article>
   );
-};
-
-export default UpdateCard;
+}

@@ -1,6 +1,11 @@
-import type { JobProps } from '../../components/JobEntry.tsx';
+import type { JobProps } from '../../components/JobEntry';
 
-export const jobs: JobProps[] = [
+/** A stored role: everything JobEntry renders, plus the flag the Resume page filters on. */
+interface JobRecord extends JobProps {
+  olderExperience: boolean;
+}
+
+export const jobs: JobRecord[] = [
   {
     color: 'orange',
     title: 'Application Developer',
@@ -86,7 +91,6 @@ export const volunteering: JobProps[] = [
     from: 'June 2025',
     to: 'July 2025',
     location: 'Kampala, Uganda',
-    olderExperience: true,
     experiences: [
       'Assisted speech therapist with toileting children and transporting them between sessions.',
       'Computed averages from session data to assist in progress tracking.',
@@ -100,7 +104,6 @@ export const volunteering: JobProps[] = [
     from: 'Sep 2019',
     to: 'Jan 2025',
     location: 'Manhattan, Kansas',
-    olderExperience: true,
     experiences: [
       'Facilitated weekly high school small group discussions.',
       'Led and supported preschool Sunday school.',

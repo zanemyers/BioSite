@@ -1,55 +1,90 @@
-import { FiCalendar } from 'react-icons/fi';
+import { FiCalendar, FiMapPin } from 'react-icons/fi';
+import Reveal from './ui/Reveal';
+import Tag, { type TagTone, toneText } from './ui/Tag';
+import { TimelineNode } from './ui/Timeline';
 
-const jobColorMap = {
-  blue: { border: 'border-blue-600', text: 'text-blue-600' },
-  green: { border: 'border-green-600', text: 'text-green-600' },
-  purple: { border: 'border-purple-600', text: 'text-purple-600' },
-  red: { border: 'border-red-600', text: 'text-red-600' },
-  orange: { border: 'border-orange-600', text: 'text-orange-600' },
-} as const;
+type JobColor = 'blue' | 'green' | 'purple' | 'red' | 'orange';
 
+interface Tone {
+  /** Tag tone this data color borrows its text color from, via `toneText`. */
+  tone: TagTone;
+  dot: string;
+  ring: string;
+}
+
+/** The five data colors mapped onto tokens (plus Tag's palette) so both themes stay legible. */
+const tones: Record<JobColor, Tone> = {
+  blue: { tone: 'accent', dot: 'bg-accent', ring: 'border-accent/50' },
+  green: { tone: 'green', dot: 'bg-emerald-500', ring: 'border-emerald-500/50' },
+  purple: { tone: 'violet', dot: 'bg-violet', ring: 'border-violet/50' },
+  red: { tone: 'red', dot: 'bg-red-500', ring: 'border-red-500/50' },
+  orange: { tone: 'orange', dot: 'bg-orange-500', ring: 'border-orange-500/50' },
+};
+
+/** What JobEntry renders. The data in jobEntries.ts adds its own filtering flag on top. */
 export interface JobProps {
-  color: 'blue' | 'green' | 'purple' | 'red' | 'orange';
+  color: JobColor;
   title: string;
   company: string;
   from: string;
   to: string;
   location: string;
   experiences: string[];
-  olderExperience: boolean;
 }
 
+/** One timeline entry: a glowing rail node plus a glass card. Renders an `<li>`. */
 export default function JobEntry(props: JobProps) {
-  const color = jobColorMap[props.color] || jobColorMap.blue;
+  const tone = tones[props.color];
+  const isCurrent = props.to === 'Present';
 
   return (
-    <div className="space-y-6 mt-4">
-      <div className={`border-l-4 pl-6 ${color.border}`}>
-        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
-          <div>
-            <h3 className="text-xl font-semibold text-card-foreground">{props.title}</h3>
-            <p className={`${color.text} font-medium`}>{props.company}</p>
-          </div>
-          <div className="flex flex-col text-muted-foreground text-sm mt-1 md:mt-0 md:items-end">
-            <div className="flex items-center">
-              <FiCalendar size={16} className="mr-1 shrink-0" />
-              <span>
-                {props.from} – {props.to}
-              </span>
+    <li>
+      <Reveal className="group relative pl-8 sm:pl-10">
+        <TimelineNode
+          className="absolute left-0 top-6.75 md:top-7.75"
+          dot={tone.dot}
+          ring={tone.ring}
+          pulse={isCurrent}
+        />
+
+        <div className="rounded-xl border border-border bg-muted/40 p-5 shadow-sm transition-colors duration-300 hover:border-accent/35 hover:bg-muted/70 md:p-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0">
+              <h3 className="text-lg font-semibold text-foreground md:text-xl">{props.title}</h3>
+              <p className={`mt-1 text-sm font-medium ${toneText(tone.tone)}`}>{props.company}</p>
             </div>
-            <div className="mt-0.5">{props.location}</div>
+            <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+              <Tag tone={isCurrent ? 'accent' : 'default'} className="tabular-nums">
+                <FiCalendar size={12} aria-hidden="true" />
+                <span>
+                  {props.from} – {props.to}
+                </span>
+              </Tag>
+              <Tag>
+                <FiMapPin size={12} aria-hidden="true" />
+                <span>{props.location}</span>
+              </Tag>
+            </div>
           </div>
+
+          {props.experiences.length > 0 && (
+            <ul className="mt-4 space-y-2.5 border-t border-border/70 pt-4">
+              {props.experiences.map((experience) => (
+                <li
+                  key={experience}
+                  className="flex gap-3 text-sm leading-relaxed text-muted-foreground"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`mt-2.75 h-px w-3.5 shrink-0 opacity-60 ${tone.dot}`}
+                  />
+                  <span>{experience}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-        {props.experiences.length > 0 && (
-          <ul className="list-disc list-outside text-muted-foreground mt-3">
-            {props.experiences.map((experience) => (
-              <li className="ms-3.5" key={experience}>
-                {experience}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
+      </Reveal>
+    </li>
   );
 }

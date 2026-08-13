@@ -1,11 +1,10 @@
-import type { UpdateCardProps } from '../../components/UpdateCard';
+import type { UpdateEntry } from '../../components/UpdateCard';
 import * as imgs from './imgs/index';
 
-// Category options: personal, professional, learning, travel
-// Date (year, month, day)
-// - month (Jan-0, Feb-1, etc.)
+// Categories are the keys of `categoryTones` in UpdateCard.tsx, so a typo here is a type error.
+// Date (year, month, day) — month is zero-based (Jan-0, Feb-1, etc.)
 
-export const updates: UpdateCardProps[] = [
+const updates: UpdateEntry[] = [
   {
     title: 'The Year I Turned 27 — and Became a Dad',
     content:
@@ -16,7 +15,7 @@ export const updates: UpdateCardProps[] = [
     date: new Date(2026, 6, 17),
     category: ['personal'],
     image: imgs.Dad,
-    imagePosition: 'side',
+    imageFit: 'contain',
   },
   {
     title: 'Flybox 2.0',
@@ -88,3 +87,8 @@ export const updates: UpdateCardProps[] = [
     image: imgs.Uganda,
   },
 ];
+
+/** Newest-first view of the entries. Sorted copy — the source array is never mutated. */
+export const sortedUpdates: UpdateEntry[] = [...updates].sort(
+  (a, b) => b.date.getTime() - a.date.getTime(),
+);
