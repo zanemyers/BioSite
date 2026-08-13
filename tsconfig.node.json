@@ -20,7 +20,10 @@
     "noUnusedParameters": false,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Node APIs, for the scripts/ build tooling */
+    "types": ["node", "bun"]
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "scripts", "tests"]
 }
