@@ -10,7 +10,7 @@ import { jobs } from './jobEntries';
 export const summary =
   'Software developer with 2+ years of full-stack experience building web applications using ' +
   'Python, Django, Vue.js, React, and Node.js. Experienced in automating workflows, integrating ' +
-  'Al tools, and maintaining CI/CD pipelines. Proven collaborator with a passion for clean, ' +
+  'AI tools, and maintaining CI/CD pipelines. Proven collaborator with a passion for clean, ' +
   'maintainable code, mentorship, and user-focused design.';
 
 export const skillGroups: { title: string; tone: TagTone; skills: string[] }[] = [
@@ -29,7 +29,7 @@ export const skillGroups: { title: string; tone: TagTone; skills: string[] }[] =
 
 export const interests = [
   'Web Development',
-  'App Development (IOS)',
+  'App Development (iOS)',
   'AI Integrations',
   'Mentorship & Personal Development',
   'International Missions & Travel',
