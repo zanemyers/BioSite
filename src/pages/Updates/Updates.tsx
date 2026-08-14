@@ -26,7 +26,7 @@ export default function Updates() {
     <>
       {/* Page head */}
       <section className="pt-14 md:pt-20" aria-labelledby="updates-title">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <Eyebrow>Life updates</Eyebrow>
             <h1
@@ -45,7 +45,7 @@ export default function Updates() {
 
       {/* Feed */}
       <section className="pb-20 pt-10 md:pb-28 md:pt-14" aria-labelledby="feed-heading">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <h2 id="feed-heading" className="sr-only">
             Update feed
           </h2>

@@ -15,7 +15,7 @@ const updates: UpdateEntry[] = [
     date: new Date(2026, 6, 17),
     category: ['personal'],
     image: imgs.Dad,
-    imageFit: 'contain',
+    imageFit: 'tall',
   },
   {
     title: 'Flybox 2.0',
@@ -85,6 +85,7 @@ const updates: UpdateEntry[] = [
     date: new Date(2026, 0, 3),
     category: ['personal', 'travel'],
     image: imgs.Uganda,
+    imageFit: 'tall',
   },
 ];
 

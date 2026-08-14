@@ -25,11 +25,23 @@ export interface UpdateEntry {
   category: UpdateCategory[];
   image?: string;
   /**
-   * How the photo fills its frame. `cover` (default) bleeds edge to edge in a 16:9 frame, which
-   * suits landscape shots. Use `contain` for portrait or otherwise tall photos — it shows the
-   * whole image, centered, rather than cropping the subject out of a wide frame.
+   * How the photo is seated. `cover` (default) bleeds edge to edge in a 16:9 frame and suits
+   * landscape shots. `tall` is for portraits, and has three stages keyed off the card's own width:
+   *
+   * - **48rem and up**: beside the text rather than above it, capped at 400px tall. Both Home's
+   *   ~1216px teaser and the feed's 840px card reach this. Stacked this wide, a 300px photo sits in
+   *   ~450px of empty gutter, which reads as a layout bug rather than a choice.
+   * - **28rem to 48rem**: stacked, the whole photo uncropped at its own proportions, centered and
+   *   capped at 400px tall. Gutters remain, but the alternative is a 600px-tall photo. On the feed
+   *   this is roughly a 480–816px viewport.
+   * - **Below 28rem**, a phone: no cap, no frame, no side layout. The photo fills the card's full
+   *   width at its own ratio. Nothing is cropped, deliberately — a centre crop into a landscape
+   *   frame takes the tops of heads off a 3:4 photo, which is worse than a tall card.
+   *
+   * All three are container queries, not viewport ones, so a card in a narrow column behaves like a
+   * phone even on a wide screen.
    */
-  imageFit?: 'cover' | 'contain';
+  imageFit?: 'cover' | 'tall';
 }
 
 /** An entry plus the per-placement presentation choices the pages make. */
@@ -38,6 +50,16 @@ type UpdateCardProps = UpdateEntry & {
   clamp?: boolean;
   /** Hides the in-card date at lg+, where the feed shows it on the timeline rail instead. */
   dateInRail?: boolean;
+  /**
+   * Seats the photo beside the text once the card clears 48rem, whatever shape the photo is. Set by
+   * Home, whose single teaser card is ~1216px wide — far wider than the photo wants to be, so a
+   * stacked landscape shot leaves a short, wide band above a short block of clamped text.
+   *
+   * Tall photos already move aside at 48rem on their own (see `imageFit`), so this only changes
+   * `cover` photos. The feed leaves it off: its cards are 840px, and a landscape photo there fills
+   * the width properly stacked.
+   */
+  imageAside?: boolean;
 };
 
 const pad = (value: number) => String(value).padStart(2, '0');
@@ -51,6 +73,7 @@ export default function UpdateCard({
   imageFit = 'cover',
   clamp = false,
   dateInRail = false,
+  imageAside = false,
 }: UpdateCardProps) {
   // Built from local parts so the machine-readable date can't drift a day across time zones.
   const isoDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
@@ -79,8 +102,10 @@ export default function UpdateCard({
       <h3 className="mt-4 text-xl font-semibold text-card-foreground text-balance md:text-2xl">
         {title}
       </h3>
+      {/* No measure cap: the body fills the card. `max-w-prose` (65ch) left 154px dead on the right
+          of every landscape card once the feed went to an 840px card. */}
       <p
-        className={`mt-3 max-w-prose text-muted-foreground leading-relaxed whitespace-pre-line ${
+        className={`mt-3 text-muted-foreground leading-relaxed whitespace-pre-line ${
           clamp ? 'line-clamp-3' : ''
         }`}
       >
@@ -89,42 +114,63 @@ export default function UpdateCard({
     </div>
   );
 
-  /* Contained photos keep their own proportions, so nothing gets cropped and the hover zoom —
-     which would crop — is left off. Cover photos bleed edge to edge in a 16:9 frame. */
+  /* Tall photos change at two container widths, 28rem and 48rem — see `imageFit`. The hover zoom is
+     left off for them: above 28rem the photo is uncropped, so there's no overflow to zoom into
+     without clipping it. Cover photos keep the zoom, since their frame always crops. */
   const picture =
-    imageFit === 'contain' ? (
-      /* Width-capped rather than height-capped, so the photo always fills its box at its own
-         proportions and is never letterboxed. Container queries — not viewport ones — drive the
-         padding and rounding, so the moment the card itself is narrower than the cap the photo
-         goes fully flush, exactly like the 16:9 covers above. */
-      <div className="border-b border-border @min-[28rem]:py-5">
+    imageFit === 'tall' ? (
+      <div className="border-b border-border @min-[28rem]:py-5 @min-[48rem]:flex @min-[48rem]:shrink-0 @min-[48rem]:items-center @min-[48rem]:border-r @min-[48rem]:border-b-0 @min-[48rem]:px-7">
         <img
           src={image}
           alt={title}
           loading="lazy"
-          className="mx-auto h-auto w-full max-w-md @min-[28rem]:rounded-xl"
+          className="mx-auto h-auto w-full @min-[28rem]:max-h-100 @min-[28rem]:w-auto @min-[28rem]:rounded-xl"
         />
       </div>
     ) : (
-      <div className="relative aspect-video overflow-hidden border-b border-border">
-        <img
-          src={image}
-          alt={title}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-        />
-        {/* Vignette settles the photo into the glass instead of ending on a hard edge. */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/25 to-transparent"
-        />
+      /* Two nested boxes so `imageAside` can inset the frame without disturbing the stacked case:
+         the outer div is a plain border below 48rem and becomes the padded side column above it,
+         while the inner one stays a 16:9 frame and just gains a width cap. */
+      <div
+        className={`border-b border-border ${
+          imageAside
+            ? '@min-[48rem]:flex @min-[48rem]:shrink-0 @min-[48rem]:items-center @min-[48rem]:border-r @min-[48rem]:border-b-0 @min-[48rem]:px-7 @min-[48rem]:py-5'
+            : ''
+        }`}
+      >
+        <div
+          className={`relative aspect-video overflow-hidden ${
+            imageAside ? '@min-[48rem]:w-100 @min-[48rem]:rounded-xl' : ''
+          }`}
+        >
+          <img
+            src={image}
+            alt={title}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+          />
+          {/* Vignette settles the photo into the glass instead of ending on a hard edge. */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/25 to-transparent"
+          />
+        </div>
       </div>
     );
 
+  /* The row switch lives on this inner wrapper, not on the article: an element can't respond to a
+     container query it declares itself, so `@min-[48rem]:` on the `@container` article resolves
+     against an ancestor and silently never matches. */
   return (
     <article className="panel panel-interactive group @container flex flex-col overflow-hidden">
-      {image && picture}
-      {body}
+      <div
+        className={`flex flex-1 flex-col ${
+          imageFit === 'tall' || imageAside ? '@min-[48rem]:flex-row' : ''
+        }`}
+      >
+        {image && picture}
+        {body}
+      </div>
     </article>
   );
 }
