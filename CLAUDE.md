@@ -8,11 +8,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 bun run dev        # Start development server (Vite HMR)
 bun run build      # Type-check (tsc -b) then bundle for production
 bun run typecheck  # Type-check only (tsc -b) — covers src, scripts, and tests
-bun run test       # Fast checks: résumé PDF invariants + colour-token contrast
+bun run test       # Fast checks: PDF invariants, colour contrast, sitemap
 bun run test:browser # Route smoke test (needs Chromium; not run in CI)
-bun run test:all   # Everything
 bun run resume:pdf # Regenerate public/zm-resume.pdf from the résumé data
-bun run resume:check # Fail if that PDF is stale relative to its source data
+bun run screenshots # Recapture the light/dark BioSite screenshots
 bun run lint       # Lint with Biome
 bun run format     # Format with Biome
 bun run check      # Biome check + auto-fix
@@ -37,7 +36,7 @@ Recurring details — email, phone, résumé path, social URLs, role, location �
 
 **Update categories** are the keys of `categoryTones` in `UpdateCard.tsx`; `UpdateCategory` is derived from them, so a typo in `updateEntries.ts` is a type error and the Updates filter row is generated from the same list.
 
-**ProjectCard**: Accepts an optional `deprecated` boolean that renders a "Deprecated" badge on the card. The `projects` array is typed by an explicit `Project` interface, so `imageDark`, `githubUrl`, `liveUrl`, and `deprecated` are plain optional properties. The featured project hero swaps in `imageDark` for dark mode (`dark:hidden` / `hidden dark:block` handle the toggle).
+**ProjectCard**: Accepts an optional `deprecated` boolean that renders a "Deprecated" badge. Its exported `Props` type is what `Projects.tsx` types the `projects` array with, so the two can't drift. Both the card and the featured hero honour an optional `imageDark`: the light image gets `dark:hidden` and the dark one `not-dark:hidden`, only when a dark variant exists — otherwise the light image would vanish in dark mode. Both render, so the theme toggle is instant.
 
 **Theme system**: Dark/light mode uses a CSS custom property design token system defined in `src/styles/styles.css` (HSL channel triplets like `--background`, `--foreground`, `--accent`, so every token composes with `/ alpha`). The `dark` class on the `<html>` element switches palettes. Theme is persisted to `localStorage` under the `theme` key and applied by an inline script in `index.html` before first paint to prevent a flash of the wrong theme.
 
@@ -56,10 +55,10 @@ Note `@source not "../../**/*.md"` at the top of `styles.css`: Tailwind v4 auto-
 - The print route is registered **only when `import.meta.env.DEV`**, so it's absent from production builds (the module tree-shakes out). That's why the generator renders against the dev server rather than a preview of `dist`.
 - The sheet clips overflow so nothing can spill onto page two, which means an overflow would silently *lose* content. The generator measures both axes and fails with the exact pixel overrun instead. It prints the fill percentage of each column — keep the main column under ~90% so bullets can be added later.
 - Only current roles appear; `olderExperience` entries are excluded by design.
-- After editing résumé data, run `bun run resume:pdf` and commit both the PDF and `scripts/zm-resume.hash`. `bun run resume:check` compares that hash against the current sources and fails CI if you forget. The hash covers typography too — `styles.css` and `index.html` — since a font change alters the render without touching any résumé text.
+- After editing résumé data, run `bun run resume:pdf` and commit both the PDF and `scripts/zm-resume.hash`. `tests/resume-pdf.test.ts` compares that hash against the current sources, so CI fails if you forget. The hash covers typography too — `styles.css` and `index.html` — since a font change alters the render without touching any résumé text.
 - `tests/resume-pdf.test.ts` guards the properties that matter: one Letter page, real font resources, and that the file hasn't regressed to an image-only export (the version this replaced was a single raster with zero extractable text, invisible to ATS parsers).
 
-**Tests**: there are deliberately few, and none on component markup — the content is static and type-checked, so snapshots would churn on every design tweak and catch little. What exists covers things nothing else can: the PDF invariants above, `tests/contrast.test.ts` (asserts the token pairings clear WCAG AA in both themes, since the light-mode accent/cyan values are deliberately dark and easy to "fix" by lightening), and `tests/browser/routes.test.ts` (every route renders with no console errors and exactly one `h1`).
+**Tests**: there are deliberately few, and none on component markup — the content is static and type-checked, so snapshots would churn on every design tweak and catch little. What exists covers things nothing else can: the PDF invariants above, `tests/contrast.test.ts` (asserts the token pairings clear WCAG AA in both themes, since the light-mode accent/cyan values are deliberately dark and easy to "fix" by lightening), `tests/sitemap.test.ts` (schema validation plus parity with the router's actual routes), and `tests/browser/routes.test.ts` (every route renders with no console errors and exactly one `h1`).
 
 Tests live in `tests/`, owned by `tsconfig.node.json` rather than the app project. Anything needing a browser goes in `tests/browser/` so the default `bun run test` — and therefore CI — needs no Chromium download; `bun run test` globs `tests/*.test.ts`, so a new fast test is picked up without editing package.json.
 
