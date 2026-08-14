@@ -69,6 +69,8 @@
   --shadow-glow: 0 10px 34px -12px hsl(var(--accent) / 0.45);
 }
 
+/* noinspection CssUnusedSymbol -- added to <html> at runtime by index.html's bootstrap
+   script and by ThemeToggle, so static analysis can't see it used. */
 .dark {
   --background: 222 47% 5%;
   --foreground: 210 40% 98%;
@@ -321,6 +323,8 @@
       transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
+  /* noinspection CssUnusedSymbol -- added by Reveal.tsx via classList once the element
+     intersects the viewport. */
   [data-reveal].is-visible {
     opacity: 1;
     transform: none;
