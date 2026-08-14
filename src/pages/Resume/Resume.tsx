@@ -16,7 +16,15 @@ import Tag from '../../components/ui/Tag';
 import { TimelineRail } from '../../components/ui/Timeline';
 import { mailto, site } from '../../siteConfig';
 import { volunteering } from './jobEntries';
-import { currentJobs, education, interests, olderJobs, skillGroups, summary } from './resumeData';
+import {
+  additionalSkills,
+  currentJobs,
+  education,
+  interests,
+  olderJobs,
+  skillGroups,
+  summary,
+} from './resumeData';
 
 interface ContactItem {
   label: string;
@@ -199,7 +207,7 @@ export default function Resume() {
           <section id="skills" aria-label="Technical Skills" className="panel p-6 sm:p-8 md:p-10">
             <SectionHeading eyebrow="04 — Stack" title="Technical Skills" />
 
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
               {skillGroups.map((group) => (
                 <div key={group.title} className="rounded-xl border border-border bg-muted/40 p-5">
                   <div className="flex items-baseline justify-between gap-3">
@@ -218,6 +226,28 @@ export default function Resume() {
                 </div>
               ))}
             </div>
+
+            <details className="group/more mt-6">
+              <summary className="flex cursor-pointer list-none items-center gap-3 rounded-xl border border-border bg-muted/40 px-4 py-3 transition-colors duration-300 hover:border-accent/40 hover:bg-muted/70">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-muted/50 text-accent">
+                  <FiPlus
+                    size={14}
+                    aria-hidden="true"
+                    className="transition-transform duration-300 group-open/more:rotate-45"
+                  />
+                </span>
+                <span className="text-sm font-medium text-foreground">More Skills</span>
+                <span className="chip ml-auto tabular-nums">+{additionalSkills.length}</span>
+              </summary>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {additionalSkills.map((skill) => (
+                  <Tag key={skill} tone="default">
+                    {skill}
+                  </Tag>
+                ))}
+              </div>
+            </details>
           </section>
         </Reveal>
 

@@ -14,7 +14,11 @@ export const jobs: JobRecord[] = [
     to: 'Present',
     location: 'Topeka, Kansas',
     olderExperience: false,
-    experiences: [],
+    experiences: [
+      'Designed and built a multi-source Python ETL pipeline that ingests, cleans, and promotes POS data for 150+ restaurant locations into the production warehouse.',
+      'Automated 100+ daily journal entries, replacing manual preparation with generated entries the accounting team reviews and approves.',
+      'Rewrote the Ratio export from an Automation Anywhere bot into a Python API process, cutting a 20-minute run to under a minute.',
+    ],
   },
   {
     color: 'blue',
