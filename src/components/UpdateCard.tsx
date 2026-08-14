@@ -50,16 +50,6 @@ type UpdateCardProps = UpdateEntry & {
   clamp?: boolean;
   /** Hides the in-card date at lg+, where the feed shows it on the timeline rail instead. */
   dateInRail?: boolean;
-  /**
-   * Seats the photo beside the text once the card clears 48rem, whatever shape the photo is. Set by
-   * Home, whose single teaser card is ~1216px wide — far wider than the photo wants to be, so a
-   * stacked landscape shot leaves a short, wide band above a short block of clamped text.
-   *
-   * Tall photos already move aside at 48rem on their own (see `imageFit`), so this only changes
-   * `cover` photos. The feed leaves it off: its cards are 840px, and a landscape photo there fills
-   * the width properly stacked.
-   */
-  imageAside?: boolean;
 };
 
 const pad = (value: number) => String(value).padStart(2, '0');
@@ -73,7 +63,6 @@ export default function UpdateCard({
   imageFit = 'cover',
   clamp = false,
   dateInRail = false,
-  imageAside = false,
 }: UpdateCardProps) {
   // Built from local parts so the machine-readable date can't drift a day across time zones.
   const isoDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
@@ -83,8 +72,11 @@ export default function UpdateCard({
     year: 'numeric',
   });
 
+  /* `@min-[48rem]:block` matters for the tall float below: a flex container is its own formatting
+     context, so its lines would refuse to wrap around the float and it would sit beside it instead.
+     Harmless everywhere else — the children are blocks either way. */
   const body = (
-    <div className="flex min-w-0 flex-1 flex-col p-6 md:p-7">
+    <div className="flex min-w-0 flex-1 flex-col p-6 md:p-7 @min-[48rem]:block">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         <div className="flex flex-wrap gap-2">
           {category.map((cat) => (
@@ -119,7 +111,12 @@ export default function UpdateCard({
      without clipping it. Cover photos keep the zoom, since their frame always crops. */
   const picture =
     imageFit === 'tall' ? (
-      <div className="border-b border-border @min-[28rem]:py-5 @min-[48rem]:flex @min-[48rem]:shrink-0 @min-[48rem]:items-center @min-[48rem]:border-r @min-[48rem]:border-b-0 @min-[48rem]:px-7">
+      /* Floated at 48rem+ rather than made a flex column, so text long enough to outrun the photo
+         wraps underneath it instead of leaving a tall blank column beside it. Self-adjusting: short
+         entries never wrap and simply sit alongside. `pt-7` matches the body's `md:p-7` so the
+         photo's top edge lines up with the category tags rather than sitting proud of them. No
+         vertical divider here — a full-height rule would cut through the wrapped text. */
+      <div className="border-b border-border @min-[28rem]:py-5 @min-[48rem]:float-left @min-[48rem]:mr-7 @min-[48rem]:mb-2 @min-[48rem]:border-b-0 @min-[48rem]:pt-7 @min-[48rem]:pl-7">
         <img
           src={image}
           alt={title}
@@ -128,21 +125,12 @@ export default function UpdateCard({
         />
       </div>
     ) : (
-      /* Two nested boxes so `imageAside` can inset the frame without disturbing the stacked case:
-         the outer div is a plain border below 48rem and becomes the padded side column above it,
-         while the inner one stays a 16:9 frame and just gains a width cap. */
-      <div
-        className={`border-b border-border ${
-          imageAside
-            ? '@min-[48rem]:flex @min-[48rem]:shrink-0 @min-[48rem]:items-center @min-[48rem]:border-r @min-[48rem]:border-b-0 @min-[48rem]:px-7 @min-[48rem]:py-5'
-            : ''
-        }`}
-      >
-        <div
-          className={`relative aspect-video overflow-hidden ${
-            imageAside ? '@min-[48rem]:w-100 @min-[48rem]:rounded-xl' : ''
-          }`}
-        >
+      /* Same float as the tall case, capped on width rather than height: a 16:9 photo held to 400px
+         tall would be 711px wide and swallow the card. Two nested boxes so the float can be inset
+         without disturbing the stacked case below 48rem — the outer one carries the position and
+         padding, the inner one stays a 16:9 frame and just gains a width cap. */
+      <div className="border-b border-border @min-[48rem]:float-left @min-[48rem]:mr-7 @min-[48rem]:mb-2 @min-[48rem]:border-b-0 @min-[48rem]:pt-7 @min-[48rem]:pl-7">
+        <div className="relative aspect-video overflow-hidden @min-[48rem]:w-100 @min-[48rem]:rounded-xl">
           <img
             src={image}
             alt={title}
@@ -158,16 +146,13 @@ export default function UpdateCard({
       </div>
     );
 
-  /* The row switch lives on this inner wrapper, not on the article: an element can't respond to a
-     container query it declares itself, so `@min-[48rem]:` on the `@container` article resolves
-     against an ancestor and silently never matches. */
+  /* `flow-root` so the card encloses the floated photo rather than collapsing behind it. It sits on
+     this inner wrapper rather than the article because an element can't respond to a container query
+     it declares itself — `@min-[48rem]:` on the `@container` article would resolve against an
+     ancestor and silently never match. */
   return (
     <article className="panel panel-interactive group @container flex flex-col overflow-hidden">
-      <div
-        className={`flex flex-1 flex-col ${
-          imageFit === 'tall' || imageAside ? '@min-[48rem]:flex-row' : ''
-        }`}
-      >
+      <div className="flex flex-1 flex-col @min-[48rem]:flow-root">
         {image && picture}
         {body}
       </div>
