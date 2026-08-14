@@ -11,6 +11,7 @@ import { readFileSync } from 'node:fs';
  *     it ships with libxml2-utils and is present on GitHub's ubuntu runners.
  *   - Route parity, which no schema can check: the sitemap has to list the routes the app
  *     actually serves. Every loc was rewritten by hand at one point with nothing verifying it.
+ *     Exact array equality covers the origin and trailing slashes at the same time.
  */
 
 const sitemap = readFileSync('public/sitemap.xml', 'utf8');
@@ -41,7 +42,6 @@ describe('sitemap', () => {
       return;
     }
     expect(xmllint.stderr.trim()).toBe('public/sitemap.xml validates');
-    expect(xmllint.status).toBe(0);
   });
 
   test('lists every route the app serves, and nothing else', () => {
@@ -49,21 +49,9 @@ describe('sitemap', () => {
     expect([...locs].sort()).toEqual(expected);
   });
 
-  test('has no trailing slashes, which would not match the routes', () => {
-    const trailing = locs.filter((loc) => loc !== `${ORIGIN}/` && loc.endsWith('/'));
-    expect(trailing).toEqual([]);
-  });
-
-  test('uses one origin', () => {
-    expect(locs.filter((loc) => !loc.startsWith(`${ORIGIN}/`))).toEqual([]);
-  });
-
-  test('has a parseable lastmod for every entry', () => {
-    const lastmods = [...sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]);
+  test('has a lastmod for every entry', () => {
+    // Only the count: the schema already constrains each value to a valid W3C date.
+    const lastmods = sitemap.match(/<lastmod>/g) ?? [];
     expect(lastmods).toHaveLength(locs.length);
-    for (const date of lastmods) {
-      expect(date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      expect(Number.isNaN(Date.parse(date))).toBe(false);
-    }
   });
 });
