@@ -7,10 +7,9 @@ import { createServer, type ViteDevServer } from 'vite';
 /**
  * Smoke test: every route renders, throws nothing, and has exactly one h1.
  *
- * Deliberately shallow. The content is static and type-checked, so asserting on copy would just
- * break on every design tweak. What isn't otherwise caught is a route crashing at runtime — a data
- * edit that trips a render, a bad import, a null deref — which is invisible until someone loads
- * the page. That is what this covers.
+ * Deliberately shallow. The content is static and type-checked, so asserting on copy would break on
+ * every design tweak. What nothing else catches is a route crashing at runtime — a data edit that
+ * trips a render, a bad import, a null deref — which stays invisible until someone loads the page.
  */
 
 const ROUTES = [
@@ -35,8 +34,8 @@ beforeAll(async () => {
   base = url;
   browser = await chromium.launch();
 
-  // Vite optimises dependencies on first load, and in-flight chunk requests 404 while it does.
-  // Warm the server once so that can't be mistaken for a real broken resource below.
+  // Vite optimises dependencies on first load, and in-flight chunk requests 404 while it does. Warm
+  // the server once so that can't be mistaken for a real broken resource below.
   const warmup = await browser.newPage();
   await warmup.goto(base, { waitUntil: 'networkidle' });
   await warmup.close();
@@ -50,8 +49,8 @@ afterAll(async () => {
 describe.each(ROUTES)('$path', ({ path, h1 }) => {
   test('renders without console errors and with exactly one h1', async () => {
     const page = await browser.newPage();
-    // Serve the webfont requests locally: this test is about the app, and a slow or blocked
-    // fonts.googleapis.com would otherwise show up as a console error or eat the timeout.
+    // Stub the webfont requests: this test is about the app, and a slow or blocked
+    // fonts.googleapis.com would otherwise surface as a console error or eat the timeout.
     await page.route(/fonts\.(googleapis|gstatic)\.com/, (route) =>
       route.fulfill({ status: 200, contentType: 'text/css', body: '' }),
     );

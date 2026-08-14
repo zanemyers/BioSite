@@ -15,12 +15,9 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/*
-         * Dev only, and outside Layout: the print sheet carries no header, footer, or backdrop.
-         * `import.meta.env.DEV` is replaced with a literal at build time, so this branch and the
-         * ResumePrint module are both dropped from the production bundle. The PDF generator runs
-         * against the dev server for the same reason — see scripts/generate-resume-pdf.ts.
-         */}
+        {/* Dev only, and outside Layout: the print sheet carries no header, footer, or backdrop.
+            `import.meta.env.DEV` becomes a literal at build time, so this branch and the
+            ResumePrint module both drop out of the production bundle. */}
         {import.meta.env.DEV && <Route path="/resume/print" element={<ResumePrint />} />}
 
         <Route element={<Layout />}>

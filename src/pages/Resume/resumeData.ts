@@ -3,8 +3,8 @@ import type { TagTone } from '../../components/ui/Tag';
 import { jobs } from './jobEntries';
 
 /**
- * Everything the résumé says, in one place. Both the /resume page and the print route that the
- * PDF is generated from read this, so the two can't drift apart.
+ * Everything the résumé says, in one place. Both /resume and the print route the PDF is generated
+ * from read this, so the two can't drift apart.
  */
 
 export const summary =

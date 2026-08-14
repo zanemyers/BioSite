@@ -69,8 +69,8 @@
   --shadow-glow: 0 10px 34px -12px hsl(var(--accent) / 0.45);
 }
 
-/* noinspection CssUnusedSymbol -- added to <html> at runtime by index.html's bootstrap
-   script and by ThemeToggle, so static analysis can't see it used. */
+/* noinspection CssUnusedSymbol -- added to <html> at runtime by index.html's bootstrap script and
+   by ThemeToggle, so static analysis can't see it used. */
 .dark {
   --background: 222 47% 5%;
   --foreground: 210 40% 98%;
@@ -323,15 +323,14 @@
       transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* noinspection CssUnusedSymbol -- added by Reveal.tsx via classList once the element
-     intersects the viewport. */
+  /* noinspection CssUnusedSymbol -- added by Reveal.tsx via classList on intersection. */
   [data-reveal].is-visible {
     opacity: 1;
     transform: none;
   }
 }
 
-/* Translate only — scaling a blur(90px) layer re-rasterize it every frame. */
+/* Translate only — scaling a blur(90px) layer re-rasterizes it every frame. */
 @keyframes drift {
   from {
     transform: translate3d(0, 0, 0);
@@ -372,8 +371,9 @@
 }
 
 /* Reveal targets that never scrolled into view are still opacity:0 when printing. */
-/* biome-ignore-start lint/complexity/noImportantStyles: an override that has to beat the base
-   [data-reveal] rule and the inline transition-delay Reveal sets, or nothing prints. */
+/* biome-ignore-start lint/complexity/noImportantStyles: these have to beat the base [data-reveal]
+   rule, the animate-* utilities, and the inline transition-delay Reveal sets — overriding those is
+   the whole point of a print rule and a reduced-motion reset. */
 @media print {
   [data-reveal] {
     opacity: 1 !important;
@@ -385,9 +385,6 @@
   html {
     scroll-behavior: auto;
   }
-
-  /* !important is deliberate here too: this has to override the animate-* utilities and any
-     inline style, which is the whole point of a reduced-motion reset. */
 
   *,
   *::before,

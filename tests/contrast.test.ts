@@ -2,15 +2,13 @@ import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
 
 /**
- * Locks in the contrast work behind the color tokens.
+ * Locks in the contrast work behind the color tokens. Each pairing here was measured and several
+ * were adjusted to clear WCAG AA — light-mode `--accent` and `--cyan` in particular are held darker
+ * than they'd otherwise be. That reasoning lives in a styles.css comment, which is easy to override
+ * with "the blue looks a bit dark"; this fails the build instead.
  *
- * These pairings were each measured and several were adjusted to clear WCAG AA — light-mode
- * `--accent` and `--cyan` in particular are held darker than they'd otherwise be. That reasoning
- * lives in a comment in styles.css, which is easy to override with "the blue looks a bit dark".
- * This fails the build instead.
- *
- * Reads the tokens straight out of the stylesheet so the test can't drift from the source.
- * The path is relative to the repo root, which is where `bun test` runs from.
+ * Tokens are read straight out of the stylesheet so the test can't drift from the source, by a path
+ * relative to the repo root, which is where `bun test` runs from.
  */
 
 const css = readFileSync('src/styles/styles.css', 'utf8');

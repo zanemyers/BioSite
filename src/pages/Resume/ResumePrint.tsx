@@ -5,19 +5,16 @@ import { volunteering } from './jobEntries';
 import { currentJobs, education, interests, skillGroups, summary } from './resumeData';
 
 /**
- * The print sheet the PDF is generated from — see scripts/generate-resume-pdf.ts.
- * Not linked from anywhere, and disallowed in robots.txt.
+ * The print sheet the PDF is generated from — see scripts/generate-resume-pdf.ts. Not linked from
+ * anywhere, and disallowed in robots.txt.
  *
  * Sized in inches and points rather than the site's rem scale, because the output is a physical
  * Letter page and everything has to land inside one. Colors are literal rather than tokens so the
- * sheet renders identically whichever theme the browser happens to be in.
+ * sheet renders identically whichever theme the browser happens to be in. Layout follows the résumé
+ * this replaced, minus the older experience the site keeps behind a disclosure.
  *
- * Layout follows the résumé this replaced: dark sidebar for skills, volunteering and interests;
- * main column for the role, a compact contact row, summary, education and experience. Only
- * current roles appear — the older experience the site keeps behind a disclosure is left off.
- *
- * The main column is deliberately kept well under full so bullets can be added to the current
- * role later. `bun run resume:pdf` prints the fill for both columns and fails on overflow.
+ * The main column is deliberately kept well under full so bullets can be added to the current role
+ * later. `bun run resume:pdf` prints the fill for both columns and fails on overflow.
  */
 
 const INK = '#0f1729';
@@ -100,10 +97,9 @@ export default function ResumePrint() {
       className="resume-sheet flex overflow-hidden bg-white font-sans"
       style={{ width: '8.5in', height: '11in', color: INK }}
     >
-      {/* Sidebar */}
-      {/* Flat fill: a decorative gradient here was verified invisible — `aside` creates no
-          stacking context, so negatively-stacked children paint behind the sheet's own
-          background. Add `isolate` here first if reintroducing one. */}
+      {/* Flat fill: a decorative gradient here was verified invisible — `aside` creates no stacking
+          context, so negatively-stacked children paint behind the sheet's own background. Add
+          `isolate` here first if reintroducing one. */}
       <aside
         className="flex w-60 shrink-0 flex-col px-[0.32in] py-[0.38in] text-white"
         style={{ backgroundColor: SIDEBAR }}
@@ -129,8 +125,8 @@ export default function ResumePrint() {
                 <p className="font-mono text-[7.6pt] uppercase tracking-[0.12em] text-white/50">
                   {group.title}
                 </p>
-                {/* Each skill keeps its separator on a nowrap span with a breakable space after,
-                    so a wrapped line never begins with a stray dot. */}
+                {/* Separator rides a nowrap span with a breakable space after, so a wrapped line
+                    never begins with a stray dot. */}
                 <p className="mt-0.5 text-[8.6pt] leading-[1.45] text-white/90">
                   {group.skills.map((skill, index) => (
                     <Fragment key={skill}>
@@ -189,7 +185,6 @@ export default function ResumePrint() {
         </div>
       </aside>
 
-      {/* Main column */}
       <main className="flex-1 px-[0.38in] py-[0.38in]">
         <header>
           <p className="font-display text-[13pt] font-semibold" style={{ color: ACCENT }}>

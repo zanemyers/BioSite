@@ -3,23 +3,19 @@
  *
  *   bun run resume:pdf
  *
- * The output is a real vector PDF: selectable text, Letter size, parseable by the ATS software
- * that ignores an image-only résumé. Re-run it whenever résumé data changes — `bun run
- * resume:check` compares a hash of that data against the one recorded here and fails if the PDF
- * has gone stale.
+ * The output is a real vector PDF: selectable text, Letter size, parseable by the ATS software that
+ * ignores an image-only résumé. Re-run it whenever résumé data changes — `bun run test` compares a
+ * hash of that data against the one recorded here and fails if the PDF has gone stale.
  *
- * This renders against the DEV server, not a production preview, because /resume/print is
- * registered only when import.meta.env.DEV is true and so does not exist in a production build.
- * Layout is identical either way: the sheet's sizing is all inches and points, and the fonts come
- * from the same stylesheet.
+ * Renders against the DEV server, not a production preview, because /resume/print is registered
+ * only when import.meta.env.DEV. Layout is identical either way: the sheet sizes in inches and
+ * points, and the fonts come from the same stylesheet.
  */
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
-// The callbacks passed to page.evaluate() run in the browser, not in this process, so this file
-// needs DOM types alongside the Node ones. Declared here rather than in tsconfig.node.json to
-// keep the reason next to the code that needs it. Note this widens the whole tsconfig.node.json
-// program, not just this file — TypeScript has no per-file lib scoping. dom.iterable is what gives
-// HTMLCollection a [Symbol.iterator], without which spreading `.children` doesn't typecheck.
+// page.evaluate() callbacks run in the browser, so this file needs DOM types alongside Node's, and
+// dom.iterable for spreading `.children`. This widens the whole tsconfig.node.json program, not
+// just this file — TypeScript has no per-file lib scoping.
 import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright';
 import { createServer } from 'vite';
@@ -43,9 +39,9 @@ try {
   await page.emulateMedia({ media: 'print', colorScheme: 'light' });
   await page.evaluate(() => document.fonts.ready);
 
-  // Fonts first: fallback metrics would make every measurement below meaningless, and the run
-  // would still stamp a fresh hash. `fonts.check()` returns true when NO matching face exists,
-  // so an empty face set has to be tested separately — that is the offline case.
+  // Fonts first: fallback metrics would make every measurement below meaningless, and the run would
+  // still stamp a fresh hash. `fonts.check()` returns true when no faces are loaded at all, so the
+  // offline case needs the separate size check.
   const fonts = await page.evaluate(() => ({
     faceCount: document.fonts.size,
     missing: [
@@ -62,10 +58,9 @@ try {
     );
   }
 
-  // The sheet clips overflow so a stray line can't spill onto a second page — which means an
-  // overflow would silently lose content. Measure each column's real content extent (its last
-  // child's bottom edge, since the columns themselves stretch to full height) and fail if it
-  // runs past the printable area.
+  // The sheet clips overflow so nothing spills onto a second page, which means an overflow would
+  // silently lose content. Measure each column's real content extent — its last child's bottom
+  // edge, since the columns themselves stretch to full height — and fail instead.
   const fit = await page.evaluate(() => {
     const sheet = document.querySelector('.resume-sheet');
     if (!sheet) return null;
