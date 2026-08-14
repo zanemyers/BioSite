@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
 
 /**
- * Locks in the contrast work behind the colour tokens.
+ * Locks in the contrast work behind the color tokens.
  *
  * These pairings were each measured and several were adjusted to clear WCAG AA — light-mode
  * `--accent` and `--cyan` in particular are held darker than they'd otherwise be. That reasoning
