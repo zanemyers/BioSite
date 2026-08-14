@@ -41,7 +41,7 @@ const contact = [
 /** Sidebar section label: tracked caps over a hairline. */
 function SideHeading({ children }: { children: string }) {
   return (
-    <h2 className="mb-[6pt] border-b border-white/20 pb-[3pt] font-display text-[9pt] font-semibold uppercase tracking-[0.16em] text-white/90">
+    <h2 className="mb-2 border-b border-white/20 pb-1 font-display text-[9pt] font-semibold uppercase tracking-[0.16em] text-white/90">
       {children}
     </h2>
   );
@@ -50,7 +50,7 @@ function SideHeading({ children }: { children: string }) {
 /** Main-column section label, matching the site's heading-plus-rule rhythm. */
 function MainHeading({ children }: { children: string }) {
   return (
-    <div className="mb-[6pt] flex items-center gap-[6pt]">
+    <div className="mb-2 flex items-center gap-2">
       <h2
         className="font-display text-[11pt] font-semibold uppercase tracking-[0.14em]"
         style={{ color: INK }}
@@ -62,7 +62,7 @@ function MainHeading({ children }: { children: string }) {
   );
 }
 
-/** Title and organisation on the left, dates and location on the right. */
+/** Title and organization on the left, dates and location on the right. */
 function EntryHead({
   title,
   org,
@@ -107,7 +107,7 @@ export default function ResumePrint() {
           stacking context, so negatively-stacked children paint behind the sheet's own
           background. Add `isolate` here first if reintroducing one. */}
       <aside
-        className="flex w-[2.5in] shrink-0 flex-col px-[0.32in] py-[0.38in] text-white"
+        className="flex w-60 shrink-0 flex-col px-[0.32in] py-[0.38in] text-white"
         style={{ backgroundColor: SIDEBAR }}
       >
         <div>
@@ -118,14 +118,14 @@ export default function ResumePrint() {
           </h1>
           <div
             aria-hidden="true"
-            className="mt-[7pt] h-[2.5pt] w-[42pt]"
+            className="mt-[7pt] h-[2.5pt] w-14"
             style={{ background: `linear-gradient(90deg, ${ACCENT}, #3be1f7)` }}
           />
         </div>
 
         <div className="mt-[17pt]">
           <SideHeading>Technical Skills</SideHeading>
-          <div className="space-y-[6pt]">
+          <div className="space-y-2">
             {skillGroups.map((group) => (
               <div key={group.title}>
                 <p className="font-mono text-[7.6pt] uppercase tracking-[0.12em] text-white/50">
@@ -133,7 +133,7 @@ export default function ResumePrint() {
                 </p>
                 {/* Each skill keeps its separator on a nowrap span with a breakable space after,
                     so a wrapped line never begins with a stray dot. */}
-                <p className="mt-[1.5pt] text-[8.6pt] leading-[1.45] text-white/90">
+                <p className="mt-0.5 text-[8.6pt] leading-[1.45] text-white/90">
                   {group.skills.map((skill, index) => (
                     <Fragment key={skill}>
                       <span className="whitespace-nowrap">
@@ -162,7 +162,7 @@ export default function ResumePrint() {
                 </p>
                 <p className="font-mono text-[7pt] text-white/45">{role.location}</p>
                 {role.experiences.length > 0 && (
-                  <ul className="mt-[3pt] space-y-[2pt]">
+                  <ul className="mt-1 space-y-[2pt]">
                     {role.experiences.map((item) => (
                       <li key={item} className="flex gap-[4pt] text-[7.8pt] leading-[1.32]">
                         <span
@@ -198,7 +198,7 @@ export default function ResumePrint() {
             Software Engineer
           </p>
           {/* Compact wrapped row — the stacked list this replaced was eating the sidebar. */}
-          <ul className="mt-[6pt] flex flex-wrap gap-x-[12pt] gap-y-[3pt]">
+          <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
             {contact.map((item) => {
               const Icon = item.icon;
               return (
@@ -213,7 +213,7 @@ export default function ResumePrint() {
               );
             })}
           </ul>
-          <div aria-hidden="true" className="mt-[9pt] h-px" style={{ backgroundColor: RULE }} />
+          <div aria-hidden="true" className="mt-3 h-px" style={{ backgroundColor: RULE }} />
         </header>
 
         <section className="mt-[14pt]">
@@ -247,12 +247,12 @@ export default function ResumePrint() {
                   location={job.location}
                 />
                 {job.experiences.length > 0 && (
-                  <ul className="mt-[3pt] space-y-[2.5pt]">
+                  <ul className="mt-1 space-y-[2.5pt]">
                     {job.experiences.map((item) => (
                       <li key={item} className="flex gap-[5pt] text-[9.2pt] leading-[1.38]">
                         <span
                           aria-hidden="true"
-                          className="mt-[4.5pt] h-px w-[5pt] shrink-0"
+                          className="mt-1.5 h-px w-[5pt] shrink-0"
                           style={{ backgroundColor: ACCENT }}
                         />
                         <span style={{ color: MUTED }}>{item}</span>
