@@ -6,6 +6,7 @@ import SectionHeading, { Eyebrow } from '../../components/ui/SectionHeading';
 import Tag from '../../components/ui/Tag';
 import { mailto } from '../../siteConfig';
 import bioSitePicture from './imgs/bioSite.jpg';
+import bioSiteDarkPicture from './imgs/bioSite_dark.jpg';
 import budgeteerPicture from './imgs/budgeteer.jpg';
 import flyboxPicture from './imgs/flybox.jpg';
 import flybox2DarkPicture from './imgs/flybox2_dark.jpg';
@@ -55,6 +56,7 @@ const projects: Project[] = [
     title: 'BioSite',
     description: "A website all about me! And guess what... you're already there!",
     image: bioSitePicture,
+    imageDark: bioSiteDarkPicture,
     technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'React Router'],
     githubUrl: 'https://github.com/zanemyers/BioSite',
     liveUrl: 'https://zm1.org',
