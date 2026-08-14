@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "resume:pdf": "bun scripts/generate-resume-pdf.ts",
     "resume:check": "bun scripts/check-resume-pdf.ts",
+    "screenshots": "bun scripts/capture-screenshots.ts",
     "typecheck": "tsc -b",
     "test": "bun test tests/*.test.ts",
     "test:all": "bun test",
