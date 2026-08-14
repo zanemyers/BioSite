@@ -51,10 +51,8 @@ function SideHeading({ children }: { children: string }) {
 function MainHeading({ children }: { children: string }) {
   return (
     <div className="mb-2 flex items-center gap-2">
-      <h2
-        className="font-display text-[11pt] font-semibold uppercase tracking-[0.14em]"
-        style={{ color: INK }}
-      >
+      {/* Inherits INK from the sheet root. */}
+      <h2 className="font-display text-[11pt] font-semibold uppercase tracking-[0.14em]">
         {children}
       </h2>
       <span className="h-px flex-1" style={{ backgroundColor: RULE }} />
