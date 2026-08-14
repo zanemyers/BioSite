@@ -1,7 +1,7 @@
 import { FiExternalLink, FiGithub } from 'react-icons/fi';
 import Tag from './ui/Tag';
 
-interface Props {
+export interface Props {
   title: string;
   description: string;
   image: string;

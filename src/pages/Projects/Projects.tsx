@@ -1,5 +1,5 @@
 import { FiArrowUpRight, FiExternalLink, FiGithub } from 'react-icons/fi';
-import ProjectCard from '../../components/ProjectCard';
+import ProjectCard, { type Props as Project } from '../../components/ProjectCard';
 import Button from '../../components/ui/Button';
 import Reveal from '../../components/ui/Reveal';
 import SectionHeading, { Eyebrow } from '../../components/ui/SectionHeading';
@@ -11,18 +11,6 @@ import budgeteerPicture from './imgs/budgeteer.jpg';
 import flyboxPicture from './imgs/flybox.jpg';
 import flybox2DarkPicture from './imgs/flybox2_dark.jpg';
 import flybox2LightPicture from './imgs/flybox2_light.jpg';
-
-interface Project {
-  title: string;
-  description: string;
-  image: string;
-  /** Dark-mode variant. Both images render; `dark:hidden` / `not-dark:hidden` pick one. */
-  imageDark?: string;
-  technologies: string[];
-  githubUrl?: string;
-  liveUrl?: string;
-  deprecated?: boolean;
-}
 
 /** The first entry is rendered as the featured hero; the rest fill the grid. */
 const projects: Project[] = [
@@ -126,7 +114,9 @@ export default function Projects() {
                   src={featured.image}
                   alt={`Screenshot of ${featured.title}`}
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover object-top-left dark:hidden"
+                  className={`absolute inset-0 h-full w-full object-cover object-top-left ${
+                    featured.imageDark ? 'dark:hidden' : ''
+                  }`}
                 />
                 {featured.imageDark && (
                   <img
