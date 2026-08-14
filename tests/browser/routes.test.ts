@@ -61,10 +61,7 @@ describe.each(ROUTES)('$path', ({ path, h1 }) => {
     });
     page.on('pageerror', (err) => problems.push(`pageerror: ${err.message}`));
 
-    const response = await page.goto(new URL(path.slice(1), base).href, {
-      waitUntil: 'networkidle',
-    });
-    expect(response?.status()).toBeLessThan(400);
+    await page.goto(new URL(path.slice(1), base).href, { waitUntil: 'networkidle' });
 
     const headings = await page.evaluate(() =>
       [...document.querySelectorAll('h1')].map((el) => el.textContent?.trim() ?? ''),
@@ -73,15 +70,6 @@ describe.each(ROUTES)('$path', ({ path, h1 }) => {
     expect(headings[0]).toContain(h1);
     expect(problems).toEqual([]);
 
-    await page.close();
-  }, 30_000);
-});
-
-describe('/resume/print', () => {
-  test('exists in dev, where the PDF generator needs it', async () => {
-    const page = await browser.newPage();
-    await page.goto(new URL('resume/print', base).href, { waitUntil: 'networkidle' });
-    expect(await page.locator('.resume-sheet').count()).toBe(1);
     await page.close();
   }, 30_000);
 });

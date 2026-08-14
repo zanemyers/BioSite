@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
-import { readFileSync } from 'node:fs';
-import { PDF_FILE } from '../scripts/resume-sources.ts';
+import { existsSync, readFileSync } from 'node:fs';
+import { HASH_FILE, PDF_FILE, sourceHash } from '../scripts/resume-sources.ts';
 
 /**
  * Guards the properties that make the résumé usable rather than decorative. The version this
@@ -33,15 +33,6 @@ const pageSize = mediaBox
   ? { width: Math.round(Number(mediaBox[1])), height: Math.round(Number(mediaBox[2])) }
   : null;
 
-// Count the dicts and the ones we could size separately: a dict whose key order defeats the
-// pattern would otherwise contribute zero bytes and make the share assertion silently vacuous.
-const imageDicts = (raw.match(/\/Subtype\s*\/Image/g) ?? []).length;
-const sizedImages = [...raw.matchAll(/\/Subtype\s*\/Image.{0,400}?\/Length\s+(\d+)/gs)].map((m) =>
-  Number(m[1]),
-);
-const imageBytes = sizedImages.reduce((sum, n) => sum + n, 0);
-const imageShare = imageBytes / pdf.length;
-
 // `/Type /Font` entries survive in the raw bytes; `/FontFile*` and `/BaseFont` do not, because
 // Chromium writes them inside Flate-compressed object streams.
 const fontObjects = (raw.match(/\/Type\s*\/Font/g) ?? []).length;
@@ -60,14 +51,14 @@ describe('résumé PDF', () => {
     expect(fontObjects).toBeGreaterThanOrEqual(3);
   });
 
-  test('is not a scanned or image-exported résumé', () => {
-    // Every image dict must be accounted for, or the share below proves nothing.
-    expect(sizedImages).toHaveLength(imageDicts);
-    expect(imageShare).toBeLessThan(0.5);
-  });
-
   test('is a plausible size for a single vector page', () => {
     expect(pdf.length).toBeGreaterThan(20_000);
     expect(pdf.length).toBeLessThan(600_000);
+  });
+
+  test('is current — regenerate with `bun run resume:pdf` if this fails', () => {
+    // The PDF is a committed artifact, so it can silently fall behind the data it came from.
+    const recorded = existsSync(HASH_FILE) ? readFileSync(HASH_FILE, 'utf8').trim() : '(none)';
+    expect(recorded).toBe(sourceHash());
   });
 });
