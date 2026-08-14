@@ -25,21 +25,22 @@ export interface UpdateEntry {
   category: UpdateCategory[];
   image?: string;
   /**
-   * How the photo is seated. `cover` (default) bleeds edge to edge in a 16:9 frame and suits
-   * landscape shots. `tall` is for portraits, and has three stages keyed off the card's own width:
+   * Which dimension the photo is capped on. It does not choose the layout — every photo floats left
+   * with the text wrapping around it above a 48rem card, and every photo is full-bleed and stacked
+   * below that. This only decides how big the float is:
    *
-   * - **48rem and up**: beside the text rather than above it, capped at 400px tall. Both Home's
-   *   ~1216px teaser and the feed's 840px card reach this. Stacked this wide, a 300px photo sits in
-   *   ~450px of empty gutter, which reads as a layout bug rather than a choice.
-   * - **28rem to 48rem**: stacked, the whole photo uncropped at its own proportions, centered and
-   *   capped at 400px tall. Gutters remain, but the alternative is a 600px-tall photo. On the feed
-   *   this is roughly a 480–816px viewport.
-   * - **Below 28rem**, a phone: no cap, no frame, no side layout. The photo fills the card's full
-   *   width at its own ratio. Nothing is cropped, deliberately — a centre crop into a landscape
-   *   frame takes the tops of heads off a 3:4 photo, which is worse than a tall card.
+   * - `cover` (default), for landscape shots: a 16:9 frame capped at **400px wide**. Capping height
+   *   instead would make a 16:9 photo 711px wide and swallow the card.
+   * - `tall`, for portraits: capped at **400px tall**, so a 3:4 photo lands at 300px wide.
    *
-   * All three are container queries, not viewport ones, so a card in a narrow column behaves like a
-   * phone even on a wide screen.
+   * `tall` has one extra stage the other doesn't. Below a 28rem card it drops the cap as well as the
+   * float and fills the full card width at the photo's own ratio — uncropped on purpose, because a
+   * centre crop into a landscape frame takes the tops of heads off a 3:4 photo, which is worse than
+   * a tall card. On the feed that's roughly a viewport under 480px.
+   *
+   * All of it is container queries rather than viewport ones, so a card in a narrow column behaves
+   * like a phone even on a wide screen. Note the query reads the *content* box, and `.panel` has a
+   * 1px border — so every threshold lands ~2px later than the card's outer width implies.
    */
   imageFit?: 'cover' | 'tall';
 }
