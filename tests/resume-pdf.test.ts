@@ -14,7 +14,7 @@ import { PDF_FILE } from '../scripts/resume-sources.ts';
  *     image-only export lacks entirely.
  *   - An image's `/Width` and `/Height` are pixels, not points, so they can't be compared against
  *     the page box. Byte share is the honest proxy: the decorative sidebar gradient Chromium
- *     rasterises accounts for ~15% of this file, where a scanned page would be nearly all of it.
+ *     rasterizes accounts for ~15% of this file, where a scanned page would be nearly all of it.
  *
  * Everything is derived into a small value before asserting, so a failure prints a readable number
  * rather than 300KB of binary.
