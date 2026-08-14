@@ -226,7 +226,7 @@ export default function Home() {
             </Reveal>
 
             <Reveal delay={80} className="mt-10">
-              <UpdateCard {...latestUpdate} clamp imageAside />
+              <UpdateCard {...latestUpdate} clamp />
 
               <div className="mt-7">
                 <Button

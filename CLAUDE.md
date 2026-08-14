@@ -36,10 +36,15 @@ Recurring details — email, phone, résumé path, social URLs, role, location �
 
 **Update categories** are the keys of `categoryTones` in `UpdateCard.tsx`; `UpdateCategory` is derived from them, so a typo in `updateEntries.ts` is a type error and the Updates filter row is generated from the same list.
 
-**Update photos** (`UpdateCard.tsx`) are laid out by **container** queries on the card, never viewport ones, so a card in a narrow column behaves like a phone even on a wide screen. Two knobs:
+**Update photos** (`UpdateCard.tsx`) follow one rule, driven by **container** queries on the card rather than viewport ones — so a card in a narrow column behaves like a phone even on a wide screen.
 
-- `imageFit` on the entry itself. `cover` (default) is a 16:9 frame with `object-cover`, for landscape shots. `tall` is for portraits and has three stages: beside the text above 48rem, stacked and capped at 400px tall between 28rem and 48rem, and below 28rem no cap or frame at all — full card width at the photo's own ratio. That last stage is uncropped on purpose; a centre crop into a landscape frame cuts the tops of heads off a 3:4 photo. Updates is `max-w-5xl` specifically so its 840px card clears the 48rem stage.
-- `imageAside`, passed by the placement rather than the entry. Puts *any* photo beside the text above 48rem, and only Home sets it — its teaser card is ~1216px, wide enough that a stacked landscape shot is a short band over a short block of clamped text. The feed leaves it off.
+**Above a 48rem card the photo floats left and the text wraps around it**, continuing underneath once it outruns the photo. Floats are used deliberately over a flex row: they're self-adjusting, so a short entry sits alongside the photo and a long one wraps under, with no threshold to tune. Three consequences to know:
+
+- The body must not be a flex container at that width (`@min-[48rem]:block`), or it becomes its own formatting context and refuses to wrap around the float.
+- The wrapper needs `flow-root` so the card encloses the float. It has to sit on the inner wrapper, not the `@container` article — an element can't respond to a container query it declares itself, and `@min-[48rem]:flex-row` on the article silently never matched.
+- No vertical divider between photo and text; a full-height rule would cut through wrapped text.
+
+`imageFit` on the entry picks the size cap, not the layout. `cover` (default) caps **width** at 400px inside a 16:9 frame — capping a 16:9 photo's height at 400px would make it 711px wide and swallow the card. `tall` is for portraits and caps **height** at 400px. Below 48rem both go full-bleed and stacked, and `tall` additionally drops its cap below 28rem so a phone gets the whole photo at full card width — uncropped on purpose, since a centre crop into a landscape frame cuts the tops of heads off a 3:4 photo. Updates is `max-w-5xl` specifically so its 840px card clears the 48rem float stage.
 
 The body text carries no measure cap. `max-w-prose` (65ch) used to be there and left 154px dead on the right of every landscape card once Updates widened; the paragraph now settles around 780px on its own.
 
