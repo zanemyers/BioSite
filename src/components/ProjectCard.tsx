@@ -5,6 +5,8 @@ interface Props {
   title: string;
   description: string;
   image: string;
+  /** Optional dark-mode variant, swapped in CSS so both are preloaded and the toggle is instant. */
+  imageDark?: string;
   technologies: string[];
   githubUrl?: string;
   liveUrl?: string;
@@ -15,6 +17,7 @@ export default function ProjectCard({
   title,
   description,
   image,
+  imageDark,
   technologies,
   githubUrl,
   liveUrl,
@@ -27,8 +30,18 @@ export default function ProjectCard({
           src={image}
           alt={`Screenshot of ${title}`}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+          className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06] ${
+            imageDark ? 'dark:hidden' : ''
+          }`}
         />
+        {imageDark && (
+          <img
+            src={imageDark}
+            alt={`Screenshot of ${title}`}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 not-dark:hidden group-hover:scale-[1.06]"
+          />
+        )}
         {/* Scrim melts the screenshot into the card body instead of butting against it. */}
         <div
           aria-hidden="true"
