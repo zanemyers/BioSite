@@ -36,7 +36,7 @@ Recurring details — email, phone, résumé path, social URLs, role, location �
 
 **Update categories** are the keys of `categoryTones` in `UpdateCard.tsx`; `UpdateCategory` is derived from them, so a typo in `updateEntries.ts` is a type error and the Updates filter row is generated from the same list.
 
-**ProjectCard**: Accepts an optional `deprecated` boolean that renders a "Deprecated" badge. Its exported `Props` type is what `Projects.tsx` types the `projects` array with, so the two can't drift. Both the card and the featured hero honour an optional `imageDark`: the light image gets `dark:hidden` and the dark one `not-dark:hidden`, only when a dark variant exists — otherwise the light image would vanish in dark mode. Both render, so the theme toggle is instant.
+**ProjectCard**: Accepts an optional `deprecated` boolean that renders a "Deprecated" badge. Its exported `Props` type is what `Projects.tsx` types the `projects` array with, so the two can't drift. Both the card and the featured hero honor an optional `imageDark`: the light image gets `dark:hidden` and the dark one `not-dark:hidden`, only when a dark variant exists — otherwise the light image would vanish in dark mode. Both render, so the theme toggle is instant.
 
 **Theme system**: Dark/light mode uses a CSS custom property design token system defined in `src/styles/styles.css` (HSL channel triplets like `--background`, `--foreground`, `--accent`, so every token composes with `/ alpha`). The `dark` class on the `<html>` element switches palettes. Theme is persisted to `localStorage` under the `theme` key and applied by an inline script in `index.html` before first paint to prevent a flash of the wrong theme.
 
