@@ -25,22 +25,17 @@ export interface UpdateEntry {
   category: UpdateCategory[];
   image?: string;
   /**
-   * Which dimension the photo is capped on. It does not choose the layout — every photo floats left
-   * with the text wrapping around it above a 48rem card, and every photo is full-bleed and stacked
-   * below that. This only decides how big the float is:
+   * Which dimension the photo is capped on, not the layout: every photo floats left with the text
+   * wrapping around it above a 48rem card, and is full-bleed and stacked below that.
    *
-   * - `cover` (default), for landscape shots: a 16:9 frame capped at **400px wide**. Capping height
-   *   instead would make a 16:9 photo 711px wide and swallow the card.
-   * - `tall`, for portraits: capped at **400px tall**, so a 3:4 photo lands at 300px wide.
+   * - `cover` (default), landscape: a 16:9 frame capped at 400px wide. Capping height instead would
+   *   make a 16:9 photo 711px wide and swallow the card.
+   * - `tall`, portraits: capped at 400px tall, so a 3:4 photo lands at 300px wide. Below a 28rem
+   *   card it drops the cap too and fills the full width uncropped — a center crop into a landscape
+   *   frame takes the tops of heads off a 3:4 photo.
    *
-   * `tall` has one extra stage the other doesn't. Below a 28rem card it drops the cap as well as the
-   * float and fills the full card width at the photo's own ratio — uncropped on purpose, because a
-   * centre crop into a landscape frame takes the tops of heads off a 3:4 photo, which is worse than
-   * a tall card. On the feed that's roughly a viewport under 480px.
-   *
-   * All of it is container queries rather than viewport ones, so a card in a narrow column behaves
-   * like a phone even on a wide screen. Note the query reads the *content* box, and `.panel` has a
-   * 1px border — so every threshold lands ~2px later than the card's outer width implies.
+   * Container queries throughout, and they read the content box: with `.panel`'s 1px border, every
+   * threshold lands ~2px later than the card's outer width implies.
    */
   imageFit?: 'cover' | 'tall';
 }
@@ -73,9 +68,8 @@ export default function UpdateCard({
     year: 'numeric',
   });
 
-  /* `@min-[48rem]:block` matters for the tall float below: a flex container is its own formatting
-     context, so its lines would refuse to wrap around the float and it would sit beside it instead.
-     Harmless everywhere else — the children are blocks either way. */
+  /* `@min-[48rem]:block`: a flex container is its own formatting context, so its lines would refuse
+     to wrap around the float. Harmless elsewhere — the children are blocks either way. */
   const body = (
     <div className="flex min-w-0 flex-1 flex-col p-6 md:p-7 @min-[48rem]:block">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -95,8 +89,8 @@ export default function UpdateCard({
       <h3 className="mt-4 text-xl font-semibold text-card-foreground text-balance md:text-2xl">
         {title}
       </h3>
-      {/* No measure cap: the body fills the card. `max-w-prose` (65ch) left 154px dead on the right
-          of every landscape card once the feed went to an 840px card. */}
+      {/* No measure cap: `max-w-prose` (65ch) left 154px dead on the right once the feed card went
+          to 840px. */}
       <p
         className={`mt-3 text-muted-foreground leading-relaxed whitespace-pre-line ${
           clamp ? 'line-clamp-3' : ''
@@ -107,16 +101,13 @@ export default function UpdateCard({
     </div>
   );
 
-  /* Tall photos change at two container widths, 28rem and 48rem — see `imageFit`. The hover zoom is
-     left off for them: above 28rem the photo is uncropped, so there's no overflow to zoom into
-     without clipping it. Cover photos keep the zoom, since their frame always crops. */
+  /* Tall photos skip the hover zoom: uncropped above 28rem, so there's no overflow to zoom into
+     without clipping. Cover photos keep it — their frame always crops. */
   const picture =
     imageFit === 'tall' ? (
-      /* Floated at 48rem+ rather than made a flex column, so text long enough to outrun the photo
-         wraps underneath it instead of leaving a tall blank column beside it. Self-adjusting: short
-         entries never wrap and simply sit alongside. `pt-7` matches the body's `md:p-7` so the
-         photo's top edge lines up with the category tags rather than sitting proud of them. No
-         vertical divider here — a full-height rule would cut through the wrapped text. */
+      /* Float rather than a flex column: long text wraps underneath instead of leaving a blank
+         column beside the photo, short text just sits alongside — no threshold to tune. `pt-7`
+         aligns the photo's top with the tags. No divider; it would cut through wrapped text. */
       <div className="border-b border-border @min-[28rem]:py-5 @min-[48rem]:float-left @min-[48rem]:mr-7 @min-[48rem]:mb-2 @min-[48rem]:border-b-0 @min-[48rem]:pt-7 @min-[48rem]:pl-7">
         <img
           src={image}
@@ -126,10 +117,8 @@ export default function UpdateCard({
         />
       </div>
     ) : (
-      /* Same float as the tall case, capped on width rather than height: a 16:9 photo held to 400px
-         tall would be 711px wide and swallow the card. Two nested boxes so the float can be inset
-         without disturbing the stacked case below 48rem — the outer one carries the position and
-         padding, the inner one stays a 16:9 frame and just gains a width cap. */
+      /* Two nested boxes so the float can be inset without disturbing the stacked case below 48rem:
+         the outer carries position and padding, the inner stays a 16:9 frame with a width cap. */
       <div className="border-b border-border @min-[48rem]:float-left @min-[48rem]:mr-7 @min-[48rem]:mb-2 @min-[48rem]:border-b-0 @min-[48rem]:pt-7 @min-[48rem]:pl-7">
         <div className="relative aspect-video overflow-hidden @min-[48rem]:w-100 @min-[48rem]:rounded-xl">
           <img
@@ -147,10 +136,9 @@ export default function UpdateCard({
       </div>
     );
 
-  /* `flow-root` so the card encloses the floated photo rather than collapsing behind it. It sits on
-     this inner wrapper rather than the article because an element can't respond to a container query
-     it declares itself — `@min-[48rem]:` on the `@container` article would resolve against an
-     ancestor and silently never match. */
+  /* `flow-root` so the card encloses the float instead of collapsing behind it. On this wrapper,
+     not the article: an element can't respond to a container query it declares itself, so
+     `@min-[48rem]:` on the `@container` article resolves against an ancestor and never matches. */
   return (
     <article className="panel panel-interactive group @container flex flex-col overflow-hidden">
       <div className="flex flex-1 flex-col @min-[48rem]:flow-root">
