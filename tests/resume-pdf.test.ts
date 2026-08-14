@@ -3,21 +3,12 @@ import { existsSync, readFileSync } from 'node:fs';
 import { HASH_FILE, PDF_FILE, sourceHash } from '../scripts/resume-sources.ts';
 
 /**
- * Guards the properties that make the résumé usable rather than decorative. The version this
- * replaced was a single full-page image with zero extractable text, which reads as blank to the
- * applicant tracking systems that parse résumés — a regression that looks perfectly fine on screen.
+ * Guards the properties that make the résumé usable rather than decorative: the version this
+ * replaced was a single full-page image with zero extractable text — perfectly fine on screen, and
+ * blank to the applicant tracking systems that parse résumés.
  *
- * Reads structure off the raw file rather than taking a PDF library as a dependency. Two limits of
- * that approach, learned the hard way:
- *   - `/FontFile2` and friends sit inside Flate-compressed object streams, so their absence from
- *     the raw bytes proves nothing. `/Font` resource entries are visible, and are what an
- *     image-only export lacks entirely.
- *   - An image's `/Width` and `/Height` are pixels, not points, so they can't be compared against
- *     the page box. Byte share is the honest proxy: the decorative sidebar gradient Chromium
- *     rasterizes accounts for ~15% of this file, where a scanned page would be nearly all of it.
- *
- * Everything is derived into a small value before asserting, so a failure prints a readable number
- * rather than 300KB of binary.
+ * Structure is read off the raw bytes rather than through a PDF library. Every check derives a
+ * small value first, so a failure prints a readable number rather than 300KB of binary.
  */
 
 const pdf = readFileSync(PDF_FILE);
@@ -33,8 +24,9 @@ const pageSize = mediaBox
   ? { width: Math.round(Number(mediaBox[1])), height: Math.round(Number(mediaBox[2])) }
   : null;
 
-// `/Type /Font` entries survive in the raw bytes; `/FontFile*` and `/BaseFont` do not, because
-// Chromium writes them inside Flate-compressed object streams.
+// `/Type /Font` entries survive in the raw bytes and are what an image-only export lacks entirely.
+// `/FontFile*` and `/BaseFont` don't: Chromium writes those inside Flate-compressed object streams,
+// so their absence would prove nothing.
 const fontObjects = (raw.match(/\/Type\s*\/Font/g) ?? []).length;
 
 describe('résumé PDF', () => {
@@ -52,12 +44,15 @@ describe('résumé PDF', () => {
   });
 
   test('is a plausible size for a single vector page', () => {
+    // Byte count is the honest raster check: an image's /Width and /Height are pixels, not points,
+    // so they can't be compared against the page box. The sidebar gradient Chromium rasterizes is
+    // ~15% of this file, where a scanned page would be nearly all of it.
     expect(pdf.length).toBeGreaterThan(20_000);
     expect(pdf.length).toBeLessThan(600_000);
   });
 
   test('is current — regenerate with `bun run resume:pdf` if this fails', () => {
-    // The PDF is a committed artifact, so it can silently fall behind the data it came from.
+    // A committed artifact can silently fall behind the data it came from.
     const recorded = existsSync(HASH_FILE) ? readFileSync(HASH_FILE, 'utf8').trim() : '(none)';
     expect(recorded).toBe(sourceHash());
   });

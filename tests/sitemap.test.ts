@@ -3,15 +3,13 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 /**
- * Guards public/sitemap.xml, which nothing else checks.
- *
- * Two layers, because they catch different mistakes:
- *   - Schema validation via xmllint, which catches malformed structure and illegal values (a
- *     `<changefreq>` of "occasionally", say). Skipped with a warning if xmllint isn't installed;
- *     it ships with libxml2-utils and is present on GitHub's ubuntu runners.
- *   - Route parity, which no schema can check: the sitemap has to list the routes the app
- *     actually serves. Every loc was rewritten by hand at one point with nothing verifying it.
- *     Exact array equality covers the origin and trailing slashes at the same time.
+ * Guards public/sitemap.xml, which nothing else checks. Two layers, because they catch different
+ * mistakes:
+ *   - Schema validation via xmllint: malformed structure and illegal values, like a `<changefreq>`
+ *     of "occasionally". Skipped with a warning if xmllint isn't installed; it ships with
+ *     libxml2-utils and is present on GitHub's ubuntu runners.
+ *   - Route parity, which no schema can check. Every loc was rewritten by hand at one point with
+ *     nothing verifying it. Exact array equality covers the origin and trailing slashes too.
  */
 
 const sitemap = readFileSync('public/sitemap.xml', 'utf8');

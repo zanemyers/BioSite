@@ -22,7 +22,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    /* Node APIs, for the scripts/ build tooling */
+    /* Node and Bun globals, for the scripts/ tooling and the tests */
     "types": ["node", "bun"]
   },
   "include": ["vite.config.ts", "scripts", "tests"]
