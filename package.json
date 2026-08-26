@@ -33,6 +33,6 @@
     "playwright": "^1.62.1",
     "tailwindcss": "^4.2.4",
     "typescript": "~7.0.2",
-    "vite": "^8.2.1"
+    "vite": "^8.2.2"
   }
 }
